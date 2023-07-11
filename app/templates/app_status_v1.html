@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>アプリ情報取得状況</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+    
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <script>
+        const detail_visible = '{{ dev }}' == 'true' ? true : false;
+        const column_list = [
+            { title: 'アプリ/サイト名', data: 'app_name' },
+            { title: '形態', data: 'platform_type'},
+            { title: '状態', data: 'status', 
+                render: function(data, type, row, meta) {
+                    if (data == '未対応') {
+                        return '<span class="badge gray">' + data + '</span>';
+                    } else if (data == '取得成功') {
+                        return '<span class="badge green">' + data + '</span>';
+                    } else if (data == '取得失敗') {
+                        return '<span class="badge red">' + data + '</span>';
+                    } else {
+                        return '<span class="badge">' + data + '</span>';
+                    }
+                } },
+            { title: 'コミック収録数', data: 'comics_num' },
+            { title: '最終情報取得日時', data: 'crawled_at'},
+            { title: '取得失敗概要', data: 'detail', visible: detail_visible }
+        ]
+        // column_listに連番を振る
+        const columndefs = column_list.map((column, index) => {
+            return {
+                targets: index,
+                ...column
+            }
+        });
+
+        $(document).ready(function() {
+            $('#app-status-table').DataTable({
+                ajax: {
+                    url: '/api/app_status_table',
+                    dataSrc: 'data'
+                },
+                responsive: true,
+                order: [[2, 'asc']],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.11.2/i18n/ja.json'
+                },
+                lengthMenu: [[50, 100, 500, -1], [50, 100, 500, "全件表示"]], 
+                pagingType: 'full_numbers',
+                columnDefs: columndefs,
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>アプリ情報取得状況</h1>
+    <a href="/">Top</a>
+
+    <table id="app-status-table">
+    </table>
+</body>
+</html>

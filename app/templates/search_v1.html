@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comics List</title>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+    
+    <script>
+        const column_list = [
+            { title: 'タイトル', data: 'title' },
+            { title: 'タイトル（かな）', data: 'title_kana', visible: false },
+            { title: '著者', data: 'main_author' },
+            { title: '著者2', data: 'sub_author', visible: false },
+            { title: 'アプリ', data: 'app_name' },
+            { title: 'リンク', data: 'url',
+                render: function(data, type, row, meta) {
+                    return '<a href="' + data + '" target="_blank">🔗</a>';
+                } },
+            { title: '情報取得日', data: 'crawled_at' }
+        ]
+        // column_listに連番を振る
+        const columndefs = column_list.map((column, index) => {
+            return {
+                targets: index,
+                ...column
+            }
+        });
+
+        $(document).ready(function() {
+            $('#comics-table').DataTable({
+                ajax: {
+                    url: '/api/comics_table',
+                    dataSrc: 'data'
+                },
+                responsive: true,
+                order: [[0, 'asc']],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.11.2/i18n/ja.json'
+                },
+                lengthMenu: [[50, 100, 500, -1], [50, 100, 500, "全件表示"]], 
+                pagingType: 'full_numbers',
+                columnDefs: columndefs,
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Comics List</h1>
+
+    <a href="/app_status">アプリ情報取得状況</a>
+
+    <table id="comics-table">
+    </table>
+</body>
+</html>

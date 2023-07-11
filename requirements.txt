@@ -1,0 +1,8 @@
+flask
+Flask-SQLAlchemy
+Flask-Migrate
+psycopg2
+mysql-connector-python
+pykakasi
+bs4
+requests
