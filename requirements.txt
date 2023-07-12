@@ -1,9 +1,8 @@
 flask
 Flask-SQLAlchemy
 Flask-Migrate
-gunicorn
-psycopg2
 mysql-connector-python
+pymysql
 pykakasi
 bs4
 requests
