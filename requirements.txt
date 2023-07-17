@@ -6,3 +6,4 @@ pymysql
 pykakasi
 bs4
 requests
+selenium
