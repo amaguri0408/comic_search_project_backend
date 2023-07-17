@@ -1,82 +1,81 @@
 id,name,img_url,platform_type,app_store_url,google_play_url,site_url,abj_management_number,company_name,service_type
-36,ヤンマガweb,,web,,,https://yanmaga.jp/,ABJ 10371036,株式会社講談社,基本無料
-57,ビッコミ,,web,,,https://bigcomics.jp/,ABJ 10401118,株式会社小学館,基本無料
-35,少年ジャンプ＋,,app,web,https://apps.apple.com/jp/app/%E5%B0%91%E5%B9%B4%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97-%E8%A9%B1%E9%A1%8C%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E6%9B%B4%E6%96%B0%E3%81%AE%E6%9C%80%E5%BC%B7%E3%83%9E%E3%83%B3%E3%82%AC%E9%9B%91%E8%AA%8C%E3%82%A2%E3%83%97%E3%83%AA/id875750302,https://play.google.com/store/apps/details?id=com.access_company.android.sh_jumpplus&hl=ja,https://shonenjumpplus.com/,ABJ 10921006,集英社,基本無料
-26,マンガUP！,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%EF%BD%95%EF%BD%90/id1178874028,https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.mangaup_jp&hl=ja&gl=US,https://magazine.jp.square-enix.com/mangaup/,ABJ 11421007,株式会社 スクウェア・エニックス,基本無料
-19,マンガBANG！,,app,web,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACbang-%E4%BA%BA%E6%B0%97%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E8%AA%AD%E3%82%81%E3%82%8B%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%A2%E3%83%97%E3%83%AA/id939480693,https://play.google.com/store/apps/details?id=com.mangabang&hl=ja&gl=US,https://manga-bang.com/,ABJ 10201000,株式会社Amazia,基本無料
-18,マガポケ,,app,web,https://apps.apple.com/jp/app/id998542154,https://play.google.com/store/apps/details?id=jp.co.kodansha.android.magazinepocket,https://pocket.shonenmagazine.com/,ABJ 10371000,株式会社講談社,基本無料
-17,ピッコマ,,app,web,https://apps.apple.com/jp/app/%E3%83%94%E3%83%83%E3%82%B3%E3%83%9E/id1091496983,https://play.google.com/store/apps/details?id=jp.kakao.piccoma,https://piccoma.com/,ABJ 11471000,株式会社カカオジャパン,基本無料
-16,パルシィ,,app,https://apps.apple.com/jp/app/%E3%83%91%E3%83%AB%E3%82%B7%E3%82%A3/id1339588178,https://play.google.com/store/apps/details?id=jp.co.kodansha.palcy&hl=ja&gl=US,https://palcy.jp/,ABJ 10371002,株式会社講談社,基本無料
-13,ゼブラック,,app,web,https://apps.apple.com/jp/app/%E3%82%BC%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF/id1487411615?mt=8,https://play.google.com/store/apps/details?id=com.zebrack&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1,https://zebrack-comic.shueisha.co.jp/,ABJ 10921053,集英社,基本無料
-12,サンデーうぇぶり,,app,web,https://apps.apple.com/jp/app/%E3%82%B5%E3%83%B3%E3%83%87%E3%83%BC%E3%81%86%E3%81%87%E3%81%B6%E3%82%8A/id1252920795,https://play.google.com/store/apps/details?id=jp.co.shogakukan.sunday_webry&hl=ja&gl=US,https://www.sunday-webry.com/,ABJ 10401015,株式会社小学館,基本無料
-11,サイコミ,,app,web,https://apps.apple.com/jp/app/%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%9F-%E3%83%9E%E3%83%B3%E3%82%AC-%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E8%AA%AD%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1099688273?mt=8,https://play.google.com/store/apps/details?id=com.cygames.cycomi,https://cycomi.com/,ABJ 11181000,株式会社Cygames,基本無料
-9,コミックDAYS,,app,web,https://apps.apple.com/jp/app/%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AFdays/id1288398252,https://play.google.com/store/apps/details?id=jp.co.kodansha.comicdays,https://comic-days.com/,ABJ 10371001,株式会社講談社,基本無料
-8,ガンガンONLINE,,app,web,https://apps.apple.com/jp/app/%E3%82%AC%E3%83%B3%E3%82%AC%E3%83%B3online/id414617249,https://play.google.com/store/apps/details?id=com.ganganonline.ganganonline.a&hl=ja&gl=US,https://www.ganganonline.com/,ABJ 11421008,株式会社 スクウェア・エニックス,基本無料
-4,LINEマンガ,,app,web,https://apps.apple.com/jp/app/line-manga/id597088068,https://play.google.com/store/apps/details?id=jp.naver.linemanga.android&hl=ja&gl=JP,https://manga.line.me/,ABJ 10871000,LINE Digital Frontier株式会社,基本無料
-2,COMIC FUZ,,app,web,https://apps.apple.com/jp/app/%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B-%E3%81%BE%E3%82%93%E3%81%8C%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AFfuz/id1448827734,https://play.google.com/store/apps/details?id=com.comic_fuz&hl=ja,https://comic-fuz.com/,ABJ 10181005,株式会社 芳文社,基本無料
-1,comico,,app,web,https://apps.apple.com/jp/app/comico-komiko-wu-liaode-dumerusumatokomikku/id721512660,https://play.google.com/store/apps/details?id=jp.comico,https://www.comico.jp/,ABJ 10151000,NHN comico株式会社,基本無料
-47,ヤンチャンWeb,,web,,,https://youngchampion.jp/,ABJ 10991004,株式会社秋田書店,基本無料
-46,ヤングアニマルWeb,,web,,,https://younganimal.com/,ABJ 10311017,株式会社白泉社,基本無料
-45,マンガよもんが,,web,,,https://www.yomonga.com/,ABJ 10561002,株式会社ぶんか社,基本無料
-44,マンガボックス,,app,web,https://apps.apple.com/app/id633864753?mt=8,https://play.google.com/store/apps/details?id=com.dena.mj,https://www.mangabox.me/,ABJ 10031000,株式会社ディー・エヌ・エー,基本無料
-43,ブックライブ fun,,app,https://apps.apple.com/app/apple-store/id1597435735,https://play.google.com/store/apps/details?id=jp.booklive.fun,,ABJ 10011005,株式会社BookLive,基本無料
-42,スキマ,,app,web,https://apps.apple.com/jp/app/%E3%82%B9%E3%82%AD%E3%83%9E-%E6%BC%AB%E7%94%BB%E3%82%92%E8%AA%AD%E3%82%80%E3%81%A0%E3%81%91%E3%81%A7%E3%83%9D%E3%82%A4%E6%B4%BB%E3%81%8C%E3%81%A7%E3%81%8D%E3%82%8B%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%A2%E3%83%97%E3%83%AA/id1146312522,https://play.google.com/store/apps/details?id=com.sukima.sukima&hl=ja&gl=US,https://www.sukima.me/,ABJ 10721001,株式会社TORICO,基本無料
-41,コミックシーモア,,app,web,https://apps.apple.com/jp/app/%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF-%E3%82%B7%E3%83%BC%E3%83%A2%E3%82%A2%E3%81%AE-%E3%83%9E%E3%83%B3%E3%82%AC-%E6%9C%AC%E6%A3%9A%E3%82%A2%E3%83%97%E3%83%AA/id553190752,https://play.google.com/store/apps/details?id=jp.co.nttsolmare.cmoatab,https://freeserial.cmoa.jp/,ABJ 10121005,エヌ・ティ・ティ・ソルマーレ株式会社,基本無料
-39,コミックNewtype,,web,,,https://comic.webnewtype.com/,ABJ 10351019,株式会社KADOKAWA,基本無料
-38,がうがうモンスター,,app,web,https://apps.apple.com/jp/app/%E7%95%B0%E4%B8%96%E7%95%8C%E6%BC%AB%E7%94%BB-%E6%82%AA%E5%BD%B9%E4%BB%A4%E5%AC%A2%E3%81%BE%E3%82%93%E3%81%8C%E8%AA%AD%E3%82%80%E3%81%AA%E3%82%89-%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%8C%E3%81%86%E3%81%8C%E3%81%86/id1529238312,https://play.google.com/store/apps/details?id=jp.futabanet.gaugau.app&hl=en_US,https://gaugau.futabanet.jp/,ABJ 10191004,株式会社双葉社,基本無料
-34,ヤンジャン！アプリ,,app,web,https://app.adjust.com/ig7fs4p?redirect=https%3A%2F%2Fapps.apple.com%2Fjp%2Fapp%2Fid1351283922,https://play.google.com/store/apps/details?id=jp.co.shueisha.youngjump.android,https://ynjn.jp/,ABJ 10921017,集英社,基本無料
-33,めちゃコミック,,app,web,https://apps.apple.com/jp/app/%E3%82%81%E3%81%A1%E3%82%83%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF-%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%92%E6%AF%8E%E6%97%A5%E6%A5%BD%E3%81%97%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB-%E3%81%BE%E3%82%93%E3%81%8C-%E3%82%A2%E3%83%97%E3%83%AA/id1407165119,https://play.google.com/store/apps/details?id=jp.co.amutus.mechacomic.android.mangaapp&hl=en_US,https://mechacomic.jp/,ABJ 10481000,株式会社アムタス,基本無料
-31,マンガワン,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%AF%E3%83%B3/id774618503,https://play.google.com/store/apps/details?id=jp.co.comic.mangaone,,ABJ 10401088,株式会社小学館,基本無料
-30,マンガほっと,,app,web,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%BB%E3%81%A3%E3%81%A8-%E4%BA%BA%E6%B0%97%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%A2%E3%83%97%E3%83%AA/id1201123859,https://play.google.com/store/apps/details?id=jp.co.nspictures.mangahot&hl=ja&gl=US,https://web.mangahot.jp/,,株式会社コアミックス,基本無料
-29,マンガボックス,,app,https://app.adjust.com/dbb15ow,https://play.google.com/store/apps/details?id=com.dena.mj&hl=ja&gl=US,https://www.mangabox.me/,ABJ 12101000,株式会社マンガボックス,基本無料
-25,マンガTOP,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACtop-%E6%BC%AB%E7%94%BB%E3%83%88%E3%83%83%E3%83%97/id1477007008,https://play.google.com/store/apps/details?id=jp.manga_top.android.production&hl=ja&gl=US,https://manga-top.jp/,ABJ 11931000,株式会社日本文芸社,基本無料
-24,マンガPark,,app,web,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACpark-%E8%A9%B1%E9%A1%8C%E4%BD%9C%E5%A4%9A%E6%95%B0-%E4%BA%BA%E6%B0%97%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E6%9B%B4%E6%96%B0%E3%81%A7%E8%AA%AD%E3%82%81%E3%82%8B/id1256314933,https://play.google.com/store/apps/details?id=jp.co.hakusensha.mangapark&hl=ja,https://manga-park.com/,ABJ 10311011,株式会社白泉社,基本無料
-23,マンガLOVE,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AClove-%E4%BA%BA%E6%B0%97%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E8%AA%AD%E3%81%BF%E6%94%BE%E9%A1%8C%E3%81%AE%E5%B0%91%E5%A5%B3%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1225089513,https://play.google.com/store/apps/details?id=jp.co.shueisha.mangamee,,ABJ 10921003,集英社,基本無料
-20,マンガDX+,,app,https://apps.apple.com/us/app/id1520178585,https://play.google.com/store/apps/details?id=jp.co.Skyfall.MangaDXPlusAndroid&pli=1,https://mangadx-plus.com/,ABJ 12151000,株式会社Skyfall,基本無料
-5,PaLfe(パルフェ),,app,https://apps.apple.com/jp/app/id1490515327,https://play.google.com/store/apps/details?id=jp.palfe,,ABJ 10201001,株式会社Amazia,基本無料
-3,GANMA!,,app,web,https://apps.apple.com/app/id709003148?mt=8,https://play.google.com/store/apps/details?id=com.COMICSMART.GANMA,https://ganma.jp/,ABJ 12821000,コミックスマート株式会社,基本無料
+94,comipo,,both,https://apps.apple.com/jp/app/comipo-%E6%AF%8E%E6%97%A5%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%92%E6%A5%BD%E3%81%97%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1591548181,,https://comipo.app/,ABJ 12491001,株式会社viviON,基本無料
+93,HykeComic,,both,https://apps.apple.com/jp/app/hykecomic/id1611104309,https://play.google.com/store/apps/details?id=com.hykecomic.hyke,https://hykecomic.com/,ABJ 12571000,株式会社HykeComic,基本無料
+88,がうがうモンスター,,both,https://apps.apple.com/jp/app/id1529238312,https://play.google.com/store/apps/details?id=jp.futabanet.gaugau.app&hl=en_US,https://gaugau.futabanet.jp/,ABJ 10191004,株式会社双葉社,基本無料
+87,パイコミックス,,web,,,https://comics.pie.co.jp/,ABJ 12701000,株式会社パイ インターナショナル,最新話無料
+86,ナナイロコミックス,,web,,,https://7irocomics.jp/,ABJ 12221000,株式会社 三交社,最新話無料
+85,コミックポルカ,,web,,,https://www.123hon.com/polca/,ABJ 12551000,株式会社一二三書房,最新話無料
+84,コミックノヴァ,,web,,,https://www.123hon.com/nova/,ABJ 12551001,株式会社一二三書房,最新話無料
+83,コミッククリエ,,web,,,https://over-lap.co.jp/qurie/,ABJ 11851001,株式会社オーバーラップ,最新話無料
+82,コミックガルド,,web,,,https://comic-gardo.com/,ABJ 11851000,株式会社オーバーラップ,最新話無料
+81,コミックアース・スター,,web,,,https://www.comic-earthstar.jp/,ABJ 12451000,アース・スターエンターテイメント,最新話無料
+80,ウーコミ！,,web,,,https://woocomi.com/,ABJ 11601000,株式会社サイゾー,最新話無料
+79,一迅プラス,,web,,,https://ichijin-plus.com/,ABJ 11101002,株式会社一迅社,最新話無料
+78,マンガクロス,,web,,,https://mangacross.jp/,ABJ 10991001,株式会社秋田書店,最新話無料
+77,マンガ コミソル,,web,,,https://manga-comisol.jp/,ABJ 11381015,株式会社光文社,最新話無料
+76,ストーリアダッシュ,,web,,,https://storia.takeshobo.co.jp/,ABJ 10591003,株式会社竹書房,最新話無料
+75,WEBコミックガンマぷらす,,web,,,https://gammaplus.takeshobo.co.jp/,ABJ 10591002,株式会社竹書房,最新話無料
+74,WEBコミックガンマ,,web,,,https://webcomicgamma.takeshobo.co.jp/,ABJ 10591001,株式会社竹書房,最新話無料
+73,MAGCOMI（マグコミ）,,web,,,https://magcomi.com/,ABJ 11821001,株式会社マッグガーデン,最新話無料
+71,マンガPINK,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACpink-%E5%B0%91%E5%A5%B3%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1358615807,,,ABJ 11141004,株式会社prima,基本無料
+70,マンガDX,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACdx-%E4%BA%BA%E6%B0%97%E6%BC%AB%E7%94%BB%E3%82%84%E8%A9%B1%E9%A1%8C%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B%E3%81%BE%E3%82%93%E3%81%8C%E3%82%A2%E3%83%97%E3%83%AA/id1520178585,https://play.google.com/store/apps/details?id=jp.co.Skyfall.MangaDXPlusAndroid&hl=en_US,,ABJ 11411000,少年画報社,基本無料
+69,チケコミ,,web,,,https://www.ticket-comic.jp/,ABJ 11531001,株式会社セレス,基本無料
+68,コミックボーダー,,web,,,https://comicborder.com/,ABJ 10761002,株式会社リイド社,基本無料
+67,コミチ,,web,,,https://comici.jp/,ABJ 12361000,株式会社コミチ,基本無料
+66,Vコミ,,web,,,https://vcomi.jp/,ABJ 11081000,株式会社Vスクロールコミックス,基本無料
 65,ONE PIECE 公式漫画アプリ,,app,https://itunes.apple.com/jp/app/id994092849/,https://play.google.com/store/apps/details?id=com.access_company.android.sh_onepiece,,,,基本無料
+64,裏サンデー,,web,,,https://urasunday.com/,ABJ 10401087,株式会社小学館,最新話無料
 63,まんがライフＷＩＮ,,web,,,https://mangalifewin.takeshobo.co.jp/,ABJ 10591000,株式会社竹書房,基本無料
 62,マンガKING,,app,https://apps.apple.com/jp/app/mangaking/id1129104331,https://play.google.com/store/apps/details?id=com.fuga.mangakingrevision.android&hl=ja,,ABJ 12071000,ロケットスタッフ株式会社,基本無料
 61,マンガHEAVEN,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACheaven-%E4%BA%BA%E6%B0%97%E6%BC%AB%E7%94%BB%E3%81%BE%E3%82%93%E3%81%8C%E3%82%A2%E3%83%97%E3%83%AA/id1440943120,,,ABJ 11141005,株式会社prima,基本無料
 60,マンガFREEDOM,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACfreedom-%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1227618230,,,ABJ 11141001,株式会社prima,基本無料
 59,マンガ5,,web,,,https://manga-5.com/,ABJ 12181000,株式会社レベルファイブ,基本無料
+57,ビッコミ,,web,,,https://bigcomics.jp/,ABJ 10401118,株式会社小学館,基本無料
 56,となりのヤングジャンプ,,web,,,https://tonarinoyj.jp/,ABJ 10921015,集英社,基本無料
-53,あしたのヤングジャンプ,,web,,,https://ashitano.tonarinoyj.jp/,ABJ 10921016,集英社,基本無料
-51,PASH UP!,,web,,,https://pash-up.jp/,ABJ 10971003,株式会社主婦と生活社,基本無料
-50,HykeComic,,app,web,https://apps.apple.com/jp/app/hykecomic/id1611104309,https://play.google.com/store/apps/details?id=com.hykecomic.hyke,https://hykecomic.com/,ABJ 12571000,株式会社HykeComic,基本無料
-32,マンガ放題,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E6%94%BE%E9%A1%8C-%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E8%AA%AD%E3%81%BF%E6%94%BE%E9%A1%8C%E3%81%AE%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1273546225,https://play.google.com/store/apps/details?id=jp.bookhodai.android.bookhodai&hl=ja&gl=US,,ABJ 11141003,株式会社prima,基本無料
-28,マンガドア,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%89%E3%82%A2/id1455803178,https://play.google.com/store/apps/details?id=jp.co.lngfrnc.mangadoa&hl=en_US,,ABJ 11241000,株式会社リンガ・フランカ,基本無料
-22,マンガMee,,app,web,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AClove-%E4%BA%BA%E6%B0%97%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E8%AA%AD%E3%81%BF%E6%94%BE%E9%A1%8C%E3%81%AE%E5%B0%91%E5%A5%B3%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1225089513,https://play.google.com/store/apps/details?id=jp.co.shueisha.mangamee&hl=ja&gl=US,https://mangalove.me/,ABJ 11141000,株式会社prima,基本無料
-66,Vコミ,,web,,,https://vcomi.jp/,ABJ 11081000,株式会社Vスクロールコミックス,基本無料
-67,コミチ,,web,,,https://comici.jp/,ABJ 12361000,株式会社コミチ,基本無料
-68,コミックボーダー,,web,,,https://comicborder.com/,ABJ 10761002,株式会社リイド社,基本無料
-69,チケコミ,,web,,,https://www.ticket-comic.jp/,ABJ 11531001,株式会社セレス,基本無料
-70,マンガDX,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACdx-%E4%BA%BA%E6%B0%97%E6%BC%AB%E7%94%BB%E3%82%84%E8%A9%B1%E9%A1%8C%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B%E3%81%BE%E3%82%93%E3%81%8C%E3%82%A2%E3%83%97%E3%83%AA/id1520178585,https://play.google.com/store/apps/details?id=jp.co.Skyfall.MangaDXPlusAndroid&hl=en_US,,ABJ 11411000,少年画報社,基本無料
-71,マンガPINK,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACpink-%E5%B0%91%E5%A5%B3%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1358615807,,,ABJ 11141004,株式会社prima,基本無料
-72,comipo,,app,web,https://apps.apple.com/jp/app/comipo-%E6%AF%8E%E6%97%A5%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%92%E6%A5%BD%E3%81%97%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1591548181,,https://comipo.app/,ABJ 12491001,株式会社viviON,基本無料
-37,ComicWalker,,web,,,https://comic-walker.com/,ABJ 10351022,株式会社KADOKAWA,最新話無料
-15,ニコニコ漫画,,web,https://apps.apple.com/jp/app/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E6%BC%AB%E7%94%BB-%E9%9B%91%E8%AA%8C%E3%82%84web%E3%81%AE%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%8C%E8%AA%AD%E3%82%81%E3%82%8B/id1045938821,https://play.google.com/store/apps/details?id=jp.co.dwango.seiga.manga.android&hl=ja&gl=US,https://seiga.nicovideo.jp/manga/,ABJ 11541000,株式会社トリスタ,最新話無料
-40,コミックバンチweb,,web,,,https://www.comicbunch.com/,ABJ 10101001,株式会社新潮社,最新話無料
-64,裏サンデー,,web,,,https://urasunday.com/,ABJ 10401087,株式会社小学館,最新話無料
 55,コミックフルール,,web,,,https://comic.mf-fleur.jp/,ABJ 10351031,株式会社KADOKAWA,最新話無料
 54,くらげバンチ,,web,,,https://kuragebunch.com/,ABJ 10101003,株式会社新潮社,最新話無料
+53,あしたのヤングジャンプ,,web,,,https://ashitano.tonarinoyj.jp/,ABJ 10921016,集英社,基本無料
 52,webアクション,,web,,,https://comic-action.com/,ABJ 10191005,株式会社双葉社,最新話無料
+51,PASH UP!,,web,,,https://pash-up.jp/,ABJ 10971003,株式会社主婦と生活社,基本無料
 49,comicブースト,,web,,,https://comic-boost.com/,ABJ 10131004,株式会社幻冬舎コミックス,最新話無料
 48,実業之日本社エンタメweb J-enta,,web,,,https://j-nbooks.jp/,ABJ 10111000,株式会社実業之日本社,最新話無料
-6,pixivコミック,,app,web,https://apps.apple.com/jp/app/pixiv%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF/id975414811,https://play.google.com/store/apps/details?id=jp.pxv.android.manga&hl=ja&gl=US,https://comic.pixiv.net/,ABJ 10631000,ピクシブ株式会社,最新話無料
-73,MAGCOMI（マグコミ）,,web,,,https://magcomi.com/,ABJ 11821001,株式会社マッグガーデン,最新話無料
-74,WEBコミックガンマ,,web,,,https://webcomicgamma.takeshobo.co.jp/,ABJ 10591001,株式会社竹書房,最新話無料
-75,WEBコミックガンマぷらす,,web,,,https://gammaplus.takeshobo.co.jp/,ABJ 10591002,株式会社竹書房,最新話無料
-76,ストーリアダッシュ,,web,,,https://storia.takeshobo.co.jp/,ABJ 10591003,株式会社竹書房,最新話無料
-77,マンガ コミソル,,web,,,https://manga-comisol.jp/,ABJ 11381015,株式会社光文社,最新話無料
-78,マンガクロス,,web,,,https://mangacross.jp/,ABJ 10991001,株式会社秋田書店,最新話無料
-79,一迅プラス,,web,,,https://ichijin-plus.com/,ABJ 11101002,株式会社一迅社,最新話無料
-80,ウーコミ！,,web,,,https://woocomi.com/,ABJ 11601000,株式会社サイゾー,最新話無料
-81,コミックアース・スター,,web,,,https://www.comic-earthstar.jp/,ABJ 12451000,アース・スターエンターテイメント,最新話無料
-82,コミックガルド,,web,,,https://comic-gardo.com/,ABJ 11851000,株式会社オーバーラップ,最新話無料
-83,コミッククリエ,,web,,,https://over-lap.co.jp/qurie/,ABJ 11851001,株式会社オーバーラップ,最新話無料
-84,コミックノヴァ,,web,,,https://www.123hon.com/nova/,ABJ 12551001,株式会社一二三書房,最新話無料
-85,コミックポルカ,,web,,,https://www.123hon.com/polca/,ABJ 12551000,株式会社一二三書房,最新話無料
-86,ナナイロコミックス,,web,,,https://7irocomics.jp/,ABJ 12221000,株式会社 三交社,最新話無料
-87,パイコミックス,,web,,,https://comics.pie.co.jp/,ABJ 12701000,株式会社パイ インターナショナル,最新話無料
+47,ヤンチャンWeb,,web,,,https://youngchampion.jp/,ABJ 10991004,株式会社秋田書店,基本無料
+46,ヤングアニマルWeb,,web,,,https://younganimal.com/,ABJ 10311017,株式会社白泉社,基本無料
+45,マンガよもんが,,web,,,https://www.yomonga.com/,ABJ 10561002,株式会社ぶんか社,基本無料
+43,ブックライブ fun,,app,https://apps.apple.com/jp/app/%E3%83%96%E3%83%83%E3%82%AF%E3%83%A9%E3%82%A4%E3%83%96-fun/id1597435735,https://play.google.com/store/apps/details?id=jp.booklive.fun,,ABJ 10011005,株式会社BookLive,基本無料
+42,スキマ,,both,https://apps.apple.com/jp/app/id1146312522,https://play.google.com/store/apps/details?id=com.sukima.sukima&hl=ja&gl=US,https://www.sukima.me/,ABJ 10721001,株式会社TORICO,基本無料
+41,コミックシーモア,,both,https://apps.apple.com/jp/app/%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF-%E3%82%B7%E3%83%BC%E3%83%A2%E3%82%A2%E3%81%AE-%E3%83%9E%E3%83%B3%E3%82%AC-%E6%9C%AC%E6%A3%9A%E3%82%A2%E3%83%97%E3%83%AA/id553190752,https://play.google.com/store/apps/details?id=jp.co.nttsolmare.cmoatab,https://freeserial.cmoa.jp/,ABJ 10121005,エヌ・ティ・ティ・ソルマーレ株式会社,基本無料
+40,コミックバンチweb,,web,,,https://www.comicbunch.com/,ABJ 10101001,株式会社新潮社,最新話無料
+39,コミックNewtype,,web,,,https://comic.webnewtype.com/,ABJ 10351019,株式会社KADOKAWA,基本無料
+37,ComicWalker,,web,,,https://comic-walker.com/,ABJ 10351022,株式会社KADOKAWA,最新話無料
+36,ヤンマガweb,,web,,,https://yanmaga.jp/,ABJ 10371036,株式会社講談社,基本無料
+35,少年ジャンプ＋,,both,https://apps.apple.com/jp/app/%E5%B0%91%E5%B9%B4%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%97-%E8%A9%B1%E9%A1%8C%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E6%9B%B4%E6%96%B0%E3%81%AE%E6%9C%80%E5%BC%B7%E3%83%9E%E3%83%B3%E3%82%AC%E9%9B%91%E8%AA%8C%E3%82%A2%E3%83%97%E3%83%AA/id875750302,https://play.google.com/store/apps/details?id=com.access_company.android.sh_jumpplus&hl=ja,https://shonenjumpplus.com/,ABJ 10921006,集英社,基本無料
+34,ヤンジャン！アプリ,,both,https://app.adjust.com/ig7fs4p?redirect=https%3A%2F%2Fapps.apple.com%2Fjp%2Fapp%2Fid1351283922,https://play.google.com/store/apps/details?id=jp.co.shueisha.youngjump.android,https://ynjn.jp/,ABJ 10921017,集英社,基本無料
+33,めちゃコミック,,both,https://apps.apple.com/jp/app/%E3%82%81%E3%81%A1%E3%82%83%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF-%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%92%E6%AF%8E%E6%97%A5%E6%A5%BD%E3%81%97%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB-%E3%81%BE%E3%82%93%E3%81%8C-%E3%82%A2%E3%83%97%E3%83%AA/id1407165119,https://play.google.com/store/apps/details?id=jp.co.amutus.mechacomic.android.mangaapp&hl=en_US,https://mechacomic.jp/,ABJ 10481000,株式会社アムタス,基本無料
+32,マンガ放題,,app,https://apps.apple.com/jp/app/id1273546225,https://play.google.com/store/apps/details?id=jp.bookhodai.android.bookhodai&hl=ja&gl=US,,ABJ 11141003,株式会社prima,基本無料
+31,マンガワン,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%AF%E3%83%B3/id774618503,https://play.google.com/store/apps/details?id=jp.co.comic.mangaone,,ABJ 10401088,株式会社小学館,基本無料
+30,マンガほっと,,both,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%BB%E3%81%A3%E3%81%A8-%E4%BA%BA%E6%B0%97%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%A2%E3%83%97%E3%83%AA/id1201123859,https://play.google.com/store/apps/details?id=jp.co.nspictures.mangahot&hl=ja&gl=US,https://web.mangahot.jp/,,株式会社コアミックス,基本無料
+29,マンガボックス,,both,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9/id633864753,https://play.google.com/store/apps/details?id=com.dena.mj&hl=ja&gl=US,https://www.mangabox.me/,ABJ 12101000,株式会社新潮社,基本無料
+28,マンガドア,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%E3%83%89%E3%82%A2/id1455803178,https://play.google.com/store/apps/details?id=jp.co.lngfrnc.mangadoa&hl=en_US,,ABJ 11241000,株式会社リンガ・フランカ,基本無料
+26,マンガUP！,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AC%EF%BD%95%EF%BD%90/id1178874028,https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.mangaup_jp&hl=ja&gl=US,https://magazine.jp.square-enix.com/mangaup/,ABJ 11421007,株式会社 スクウェア・エニックス,基本無料
+25,マンガTOP,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACtop-%E6%BC%AB%E7%94%BB%E3%83%88%E3%83%83%E3%83%97/id1477007008,https://play.google.com/store/apps/details?id=jp.manga_top.android.production&hl=ja&gl=US,https://manga-top.jp/,ABJ 11931000,株式会社日本文芸社,基本無料
+24,マンガPark,,both,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACpark-%E8%A9%B1%E9%A1%8C%E4%BD%9C%E5%A4%9A%E6%95%B0-%E4%BA%BA%E6%B0%97%E6%BC%AB%E7%94%BB%E3%81%8C%E6%AF%8E%E6%97%A5%E6%9B%B4%E6%96%B0%E3%81%A7%E8%AA%AD%E3%82%81%E3%82%8B/id1256314933,https://play.google.com/store/apps/details?id=jp.co.hakusensha.mangapark&hl=ja,https://manga-park.com/,ABJ 10311011,株式会社白泉社,基本無料
+23,マンガLOVE,,app,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%AClove-%E4%BA%BA%E6%B0%97%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E8%AA%AD%E3%81%BF%E6%94%BE%E9%A1%8C%E3%81%AE%E5%B0%91%E5%A5%B3%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1225089513,https://play.google.com/store/apps/details?id=jp.co.shueisha.mangamee,,ABJ 10921003,集英社,基本無料
+22,マンガMee,,both,https://apps.apple.com/jp/app/id1435571943,https://play.google.com/store/apps/details?id=jp.co.shueisha.mangamee&hl=ja&gl=US,https://mangalove.me/,ABJ 11141000,株式会社prima,基本無料
+20,マンガDX+,,app,https://apps.apple.com/jp/app/id1520178585,https://play.google.com/store/apps/details?id=jp.co.Skyfall.MangaDXPlusAndroid&pli=1,https://mangadx-plus.com/,ABJ 12151000,株式会社Skyfall,基本無料
+19,マンガBANG！,,both,https://apps.apple.com/jp/app/%E3%83%9E%E3%83%B3%E3%82%ACbang-%E4%BA%BA%E6%B0%97%E3%81%AE%E6%BC%AB%E7%94%BB%E3%81%8C%E8%AA%AD%E3%82%81%E3%82%8B%E3%83%9E%E3%83%B3%E3%82%AC%E3%82%A2%E3%83%97%E3%83%AA/id939480693,https://play.google.com/store/apps/details?id=com.mangabang&hl=ja&gl=US,https://manga-bang.com/,ABJ 10201000,株式会社Amazia,基本無料
+18,マガポケ,,both,https://apps.apple.com/jp/app/id998542154,https://play.google.com/store/apps/details?id=jp.co.kodansha.android.magazinepocket,https://pocket.shonenmagazine.com/,ABJ 10371000,株式会社講談社,基本無料
+17,ピッコマ,,both,https://apps.apple.com/jp/app/%E3%83%94%E3%83%83%E3%82%B3%E3%83%9E/id1091496983,https://play.google.com/store/apps/details?id=jp.kakao.piccoma,https://piccoma.com/,ABJ 11471000,株式会社カカオジャパン,基本無料
+16,パルシィ,,app,https://apps.apple.com/jp/app/%E3%83%91%E3%83%AB%E3%82%B7%E3%82%A3/id1339588178,https://play.google.com/store/apps/details?id=jp.co.kodansha.palcy&hl=ja&gl=US,https://palcy.jp/,ABJ 10371002,株式会社講談社,基本無料
+15,ニコニコ漫画,,web,https://apps.apple.com/jp/app/id1045938821,https://play.google.com/store/apps/details?id=jp.co.dwango.seiga.manga.android&hl=ja&gl=US,https://seiga.nicovideo.jp/manga/,ABJ 11541000,株式会社トリスタ,最新話無料
+13,ゼブラック,,both,https://apps.apple.com/jp/app/%E3%82%BC%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF/id1487411615?mt=8,https://play.google.com/store/apps/details?id=com.zebrack&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1,https://zebrack-comic.shueisha.co.jp/,ABJ 10921053,集英社,基本無料
+12,サンデーうぇぶり,,both,https://apps.apple.com/jp/app/%E3%82%B5%E3%83%B3%E3%83%87%E3%83%BC%E3%81%86%E3%81%87%E3%81%B6%E3%82%8A/id1252920795,https://play.google.com/store/apps/details?id=jp.co.shogakukan.sunday_webry&hl=ja&gl=US,https://www.sunday-webry.com/,ABJ 10401015,株式会社小学館,基本無料
+11,サイコミ,,both,https://apps.apple.com/jp/app/%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%9F-%E3%83%9E%E3%83%B3%E3%82%AC-%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%81%8C%E8%AA%AD%E3%82%81%E3%82%8B%E6%BC%AB%E7%94%BB%E3%82%A2%E3%83%97%E3%83%AA/id1099688273?mt=8,https://play.google.com/store/apps/details?id=com.cygames.cycomi,https://cycomi.com/,ABJ 11181000,株式会社Cygames,基本無料
+9,コミックDAYS,,both,https://apps.apple.com/jp/app/%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AFdays/id1288398252,https://play.google.com/store/apps/details?id=jp.co.kodansha.comicdays,https://comic-days.com/,ABJ 10371001,株式会社講談社,基本無料
+8,ガンガンONLINE,,both,https://apps.apple.com/jp/app/%E3%82%AC%E3%83%B3%E3%82%AC%E3%83%B3online/id414617249,https://play.google.com/store/apps/details?id=com.ganganonline.ganganonline.a&hl=ja&gl=US,https://www.ganganonline.com/,ABJ 11421008,株式会社 スクウェア・エニックス,基本無料
+6,pixivコミック,,both,https://apps.apple.com/jp/app/pixiv%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF/id975414811,https://play.google.com/store/apps/details?id=jp.pxv.android.manga&hl=ja&gl=US,https://comic.pixiv.net/,ABJ 10631000,ピクシブ株式会社,最新話無料
+5,PaLfe(パルフェ),,app,https://apps.apple.com/jp/app/id1490515327,https://play.google.com/store/apps/details?id=jp.palfe,,ABJ 10201001,株式会社Amazia,基本無料
+4,LINEマンガ,,both,https://apps.apple.com/jp/app/line-manga/id597088068,https://play.google.com/store/apps/details?id=jp.naver.linemanga.android&hl=ja&gl=JP,https://manga.line.me/,ABJ 10871000,LINE Digital Frontier株式会社,基本無料
+3,GANMA!,,both,https://apps.apple.com/jp/app/id709003148,https://play.google.com/store/apps/details?id=com.COMICSMART.GANMA,https://ganma.jp/,ABJ 12821000,コミックスマート株式会社,基本無料
+2,COMIC FUZ,,both,https://apps.apple.com/jp/app/%E4%BA%BA%E6%B0%97%E3%83%9E%E3%83%B3%E3%82%AC%E3%81%8C%E6%AF%8E%E6%97%A5%E8%AA%AD%E3%82%81%E3%82%8B-%E3%81%BE%E3%82%93%E3%81%8C%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AFfuz/id1448827734,https://play.google.com/store/apps/details?id=com.comic_fuz&hl=ja,https://comic-fuz.com/,ABJ 10181005,株式会社 芳文社,基本無料
+1,comico,,both,https://apps.apple.com/jp/app/comico-komiko-wu-liaode-dumerusumatokomikku/id721512660,https://play.google.com/store/apps/details?id=jp.comico,https://www.comico.jp/,ABJ 10151000,NHN comico株式会社,基本無料
