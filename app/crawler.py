@@ -49,6 +49,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_gangan_online
         elif self.app_record.name == 'マガポケ':
             self.crawl_func = self._crawl_maga_poke
+        elif self.app_record.name == 'マンガUP！':
+            self.crawl_func = self._crawl_manga_up
         else:
             raise ValueError(f'app name is invalid {self.app_record.name}')
         self.comics = []
@@ -125,6 +127,43 @@ class ComicCrawler:
             sub_author = ','.join(author_list[min(2, len(author_list)):])
 
             url = data.find("a")["href"]
+            self.comics.append({
+                'title': title,
+                'title_kana': title_kana,
+                'main_author': main_author,
+                'sub_author': sub_author,
+                'app_id': self.app_record.id,
+                'url': url,
+                'crawled_at': crawled_at,
+            })
+
+
+    @exception
+    def _crawl_manga_up(self):
+        load_url = urljoin(self.app_record.site_url, 'original')
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+        }
+        html = requests.get(load_url, headers=headers)
+        soup = BeautifulSoup(html.content, "html.parser")
+
+        datas = soup.find_all("li")
+        crawled_at = datetime.datetime.now()
+        for data in datas:
+            if data.find("p", class_="ttl") is None: continue
+            # print(data)
+            title = data.find("p", class_="ttl").text
+            title_kana = self.conv.do(title)
+            author = data.find("p", class_="artist")
+            # 任意のタブ<>で正規表現を使って区切る
+            author_list = re.split(r'<.+?>', str(author))[1:-1]
+            author_list = list(map(lambda x: re.split(r'[:：]', x)[-1], author_list))
+            new_author_list = []
+            for author_data in author_list:
+                new_author_list.extend(author_data.split('・'))
+            main_author = ','.join(new_author_list[:min(2, len(new_author_list))])
+            sub_author = ','.join(new_author_list[min(2, len(new_author_list)):])
+            url = urljoin(load_url, data.find("a")['href'])
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
