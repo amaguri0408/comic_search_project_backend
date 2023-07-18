@@ -26,7 +26,8 @@ def crawl():
         return 'App not found'
     crawler = ComicCrawler(app_query)
     crawl_res = crawler.crawl()
-    crawler.save()
+    if crawl_res['status_code'] == 200:
+        crawler.save()
     return jsonify(crawl_res['dict']), crawl_res['status_code']
 
 

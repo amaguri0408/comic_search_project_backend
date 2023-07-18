@@ -63,6 +63,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_maga_poke
         elif self.app_record.name == 'マンガUP！':
             self.crawl_func = self._crawl_manga_up
+        elif self.app_record.name == '少年ジャンプ＋':
+            self.crawl_func = self._crawl_shonen_jump_plus
         else:
             raise ValueError(f'app name is invalid {self.app_record.name}')
         self.comics = []
@@ -217,6 +219,46 @@ class ComicCrawler:
             main_author = ','.join(new_author_list[:min(2, len(new_author_list))])
             sub_author = ','.join(new_author_list[min(2, len(new_author_list)):])
             url = urljoin(load_url + '/', data.find("a")['href'])
+            self.comics.append({
+                'title': title,
+                'title_kana': title_kana,
+                'main_author': main_author,
+                'sub_author': sub_author,
+                'app_id': self.app_record.id,
+                'url': url,
+                'crawled_at': crawled_at,
+            })
+
+
+    @exception
+    def _crawl_shonen_jump_plus(self):
+        """id:35 少年ジャンプ＋の作品一覧を取得"""
+        load_url = urljoin(self.app_record.site_url, '/series')
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+        }
+        html = requests.get(load_url, headers=headers)
+        soup = BeautifulSoup(html.content, "html.parser")
+        datas_1 = soup.find_all("li", class_="series-list-item")
+
+        load_url = urljoin(self.app_record.site_url, '/series/finished')
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+        }
+        html = requests.get(load_url, headers=headers)
+        soup = BeautifulSoup(html.content, "html.parser")
+        datas_2 = soup.find_all("li", class_="series-list-item")
+
+        datas = datas_1 + datas_2
+        crawled_at = datetime.datetime.now()
+        for data in datas:
+            title = data.find("h2", class_="series-list-title").text
+            title_kana = self.conv.do(title)
+            author = data.find("h3", class_="series-list-author").text
+            author_list = author.split('/')
+            main_author = ','.join(author_list[:min(2, len(author_list))])
+            sub_author = ','.join(author_list[min(2, len(author_list)):])
+            url = data.find("a")["href"]
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
