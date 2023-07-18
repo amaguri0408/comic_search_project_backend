@@ -1,8 +1,8 @@
 import re
 import time
-import urllib
 import datetime
 from urllib import request
+from urllib.parse import urljoin
 
 import requests
 import pykakasi
@@ -47,6 +47,10 @@ class ComicCrawler:
         self.app_record = app_record
         if self.app_record.name == 'ガンガンONLINE':
             self.crawl_func = self._crawl_gangan_online
+        elif self.app_record.name == 'マガポケ':
+            self.crawl_func = self._crawl_maga_poke
+        else:
+            raise ValueError(f'app name is invalid {self.app_record.name}')
         self.comics = []
         # ルビ振り
         kakasi = pykakasi.kakasi()
@@ -57,9 +61,10 @@ class ComicCrawler:
     def crawl(self):
         return self.crawl_func()
 
+
     @exception
     def _crawl_gangan_online(self):
-        """ガンガンONLINEの作品一覧を取得"""
+        """id:8, ガンガンONLINEの作品一覧を取得"""
         load_url = f"{self.app_record.site_url}/search"
         html = requests.get(load_url)
         soup = BeautifulSoup(html.content, "html.parser")
@@ -93,6 +98,43 @@ class ComicCrawler:
                 'url': url,
                 'crawled_at': crawled_at,
             })
+
+    
+    @exception
+    def _crawl_maga_poke(self):
+        """id:18, マガポケの作品一覧を取得"""
+        load_url = urljoin(self.app_record.site_url, '/series')
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+        }
+        html = requests.get(load_url, headers=headers)
+        soup = BeautifulSoup(html.content, "html.parser")
+
+        datas = soup.find_all("li", class_="daily-series-item")
+        crawled_at = datetime.datetime.now()
+        for data in datas:
+            title = data.find("h4", class_="daily-series-title").text
+            title_kana = self.conv.do(title)
+            author = data.find("h5", class_="daily-series-author").text
+
+            def func(x):
+                if '/' in x: return x.split('/')[1]
+                else: return x
+            author_list = list(map(func, author.split(' ')))
+            main_author = ','.join(author_list[:min(2, len(author_list))])
+            sub_author = ','.join(author_list[min(2, len(author_list)):])
+
+            url = data.find("a")["href"]
+            self.comics.append({
+                'title': title,
+                'title_kana': title_kana,
+                'main_author': main_author,
+                'sub_author': sub_author,
+                'app_id': self.app_record.id,
+                'url': url,
+                'crawled_at': crawled_at,
+            })
+
 
     def save(self):
         # 同じアプリのcomicは削除
