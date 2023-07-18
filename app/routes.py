@@ -66,9 +66,20 @@ def app_status_table_api():
     for app_record in apps:
         record_dict = {
             'app_name': app_record.name,
+            'abj_management_number': app_record.abj_management_number,
+            'company_name': app_record.company_name,
+            'service_type': app_record.service_type,
+            'img_url': app_record.img_url,
+            'url': {
+                'app_store_url': app_record.app_store_url,
+                'google_play_url': app_record.google_play_url,
+                'site_url': app_record.site_url,
+            },
         }
         if app_record.platform_type == 'app': record_dict['platform_type'] = 'アプリ'
         elif app_record.platform_type == 'web': record_dict['platform_type'] = 'Web'
+        elif app_record.platform_type == 'both': record_dict['platform_type'] = 'アプリ, Web'
+        else: record_dict['platform_type'] = '-'
         # CrawlHistoryから最新のデータを取得
         crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
         if crawl_history is None:
