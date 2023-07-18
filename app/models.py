@@ -37,7 +37,7 @@ class App(db.Model):
             return res_record
 
         if os.path.exists(f'app/static/images/app/{app_record.id}.png'):
-            res_record.img_url = f'app/static/images/app/{app_record.id}.png'
+            res_record.img_url = f'/static/images/app/{app_record.id}.png'
             return res_record
 
         try:
