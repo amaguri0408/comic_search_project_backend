@@ -13,6 +13,7 @@ from app.models import App, Comic, CrawlHistory
 
 
 def exception(func):
+    """例外処理を行うのとstatusを記録するデコレーター"""
     def wrapper(self, *args, **kwargs):
         res = {}
         try:
@@ -61,6 +62,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_sunday_webry
         elif self.app_record.name == 'マガポケ':
             self.crawl_func = self._crawl_maga_poke
+        elif self.app_record.name == 'マンガBANG！':
+            self.crawl_func = self._crawl_manga_bang
         elif self.app_record.name == 'マンガUP！':
             self.crawl_func = self._crawl_manga_up
         elif self.app_record.name == '少年ジャンプ＋':
@@ -75,6 +78,7 @@ class ComicCrawler:
         self.conv = kakasi.getConverter()
 
     def crawl(self):
+        print(f'crawling {self.app_record.name}...')
         return self.crawl_func()
 
 
@@ -190,6 +194,36 @@ class ComicCrawler:
                 'url': url,
                 'crawled_at': crawled_at,
             })
+
+
+    @exception
+    def _crawl_manga_bang(self):
+        """id:19 マンガBANG!の作品一覧を取得"""
+        i = 1
+        while True:
+            load_url = urljoin(self.app_record.site_url, f'/freemium/book_titles?page={i}')
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
+            }
+            html = requests.get(load_url, headers=headers)
+            time.sleep(0.5)
+            soup = BeautifulSoup(html.content, "html.parser")
+
+            datas = soup.find("div", class_="js-react-on-rails-component")["data-props"]
+            datas = eval(datas)["list"]["book_titles"]
+            if not datas: break
+            print(f'load {load_url}')
+            crawled_at = datetime.datetime.now()
+            for data in datas:
+                self.comics.append({
+                    'title': data["title"],
+                    'title_kana': self.conv.do(data["title"]),
+                    'main_author': data["author_name"],
+                    'app_id': self.app_record.id,
+                    'url': urljoin(self.app_record.site_url, f'freemium/book_titles{data["key"]}'),
+                    'crawled_at': crawled_at,
+                })
+            i += 1
 
 
     @exception
