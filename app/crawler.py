@@ -99,8 +99,7 @@ class ComicCrawler:
     def _crawl_gangan_online(self):
         """id:8, ガンガンONLINEの作品一覧を取得"""
         load_url = f"{self.app_record.site_url}/search"
-        html = requests.get(load_url)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
 
         # 作品一覧を取得
         datas = soup.find_all("a", class_=re.compile("SearchTitle_title"))
@@ -137,19 +136,11 @@ class ComicCrawler:
     def _crawl_sunday_webry(self):
         """id:12 サンデーうぇぶりの作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
         datas_normal = soup.find_all("a", class_="webry-series-item-link")
         # 夜サンデー
         load_url = urljoin(self.app_record.site_url, '/series/yoru-sunday')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
         datas_yoru = soup.find_all("a", class_="webry-series-item-link")
         
         datas = datas_normal + datas_yoru
@@ -177,11 +168,7 @@ class ComicCrawler:
     def _crawl_maga_poke(self):
         """id:18, マガポケの作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
 
         datas = soup.find_all("li", class_="daily-series-item")
         crawled_at = datetime.datetime.now()
@@ -215,12 +202,8 @@ class ComicCrawler:
         i = 1
         while True:
             load_url = urljoin(self.app_record.site_url, f'/freemium/book_titles?page={i}')
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
-            }
-            html = requests.get(load_url, headers=headers)
-            time.sleep(0.5)
-            soup = BeautifulSoup(html.content, "html.parser")
+            soup = get_soup(load_url)
+            time.sleep(1)
 
             datas = soup.find("div", class_="js-react-on-rails-component")["data-props"]
             datas = eval(datas)["list"]["book_titles"]
@@ -243,11 +226,7 @@ class ComicCrawler:
     def _crawl_manga_up(self):
         """id:26 マンガUP！の作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, 'original')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
 
         datas = soup.find_all("li")
         crawled_at = datetime.datetime.now()
@@ -281,19 +260,11 @@ class ComicCrawler:
     def _crawl_shonen_jump_plus(self):
         """id:35 少年ジャンプ＋の作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soup = get_soup(load_url)
         datas_1 = soup.find_all("li", class_="series-list-item")
 
         load_url = urljoin(self.app_record.site_url, '/series/finished')
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-        }
-        html = requests.get(load_url, headers=headers)
-        soup = BeautifulSoup(html.content, "html.parser")
+        soupu = get_soup(load_url)
         datas_2 = soup.find_all("li", class_="series-list-item")
 
         datas = datas_1 + datas_2
