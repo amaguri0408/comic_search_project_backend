@@ -7,3 +7,4 @@ pykakasi
 bs4
 requests
 selenium
+tqdm

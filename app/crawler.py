@@ -1,6 +1,7 @@
 import re
 import time
 import datetime
+from tqdm import tqdm
 from urllib import request
 from urllib.parse import urljoin
 
@@ -53,6 +54,16 @@ def exception(func):
     return wrapper
 
 
+def get_soup(url):
+    """urlからsoupを取得する"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+    }
+    res = requests.get(url, headers=headers)
+    soup = BeautifulSoup(res.content, 'html.parser')
+    return soup
+
+
 class ComicCrawler:
     def __init__(self, app_record: App):
         self.app_record = app_record
@@ -68,6 +79,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_manga_up
         elif self.app_record.name == '少年ジャンプ＋':
             self.crawl_func = self._crawl_shonen_jump_plus
+        elif self.app_record.name in ('裏サンデー', 'マンガワン'):
+            self.crawl_func = self._crawl_ura_sunday
         else:
             raise ValueError(f'app name is invalid {self.app_record.name}')
         self.comics = []
@@ -304,15 +317,78 @@ class ComicCrawler:
             })
 
 
+    @exception
+    def _crawl_ura_sunday(self):
+        """id:64 裏サンデーの作品一覧を取得"""
+        crawled_at = datetime.datetime.now()
+        # 連載中作品
+        print("連載中作品:")
+        load_url = urljoin(self.app_record.site_url, '/serial_title')
+        soup = get_soup(load_url)
+        datas = soup.find("div", class_="title-all-list").find_all("li")
+        for data in tqdm(datas):
+            if not data.find("a"): continue
+            href = data.find("a")["href"]
+            time.sleep(1)
+            url = urljoin(self.app_record.site_url, href)
+            soup_comic = get_soup(url)
+
+            info = soup_comic.find("div", class_="info")
+            title = info.find("h1").text.strip()
+            author = info.find("div", class_="author").text.strip()
+            author_list = list(map(lambda x: re.split(r'[:：]', x)[-1].strip(), author.split('\u3000')))
+            author_list = list(filter(lambda x: not x, author_list))
+            self.comics.append({
+                'title': title,
+                'title_kana': self.conv.do(title),
+                'main_author': ','.join(author_list),
+                'app_id': self.app_record.id,
+                'url': url,
+                'crawled_at': crawled_at,
+            })
+
+
+        # 完結作品
+        load_url = urljoin(self.app_record.site_url, '/complete_title')
+        soup = get_soup(load_url)
+
+        datas = soup.find("div", class_="title-all-list").find_all("li")
+        for data in datas:
+            if not data.find("h2"): continue
+            title = data.find("h2").text
+            author = data.find("div").find("div").text
+            author_list = list(map(lambda x: x.split(":")[-1].strip(), author.split('\u3000')))
+            url = data.find("a")["href"]
+            self.comics.append({
+                'title': title,
+                'title_kana': self.conv.do(title),
+                'main_author': ','.join(author_list),
+                'app_id': self.app_record.id,
+                'url': urljoin(self.app_record.site_url, data.find("a")["href"]),
+                'crawled_at': crawled_at,
+            })
+        
+        # app_idをマンガワンに変更したものを追加
+        app_record = App.query.filter_by(name='マンガワン').first()
+        crawler = ComicCrawler(app_record)
+        for comic in self.comics:
+            new_comic = comic.copy()
+            new_comic['app_id'] = app_record.id
+            crawler.comics.append(new_comic)
+        crawler.save()
+
+
     def save(self):
         # 同じアプリのcomicは削除
         delete_comic = Comic.query.filter_by(app_id=self.app_record.id)
-        print(f'delete App {self.app_record.name} {delete_comic.count()} comics')
+        print(f'deleted App {self.app_record.name} {delete_comic.count()} comics')
         delete_comic.delete()
         db.session.commit()
 
+        print(f'adding {len(self.comics)} comics')
         for comic in self.comics:
             comic_record = Comic(**comic)
             db.session.add(comic_record)
         db.session.commit()
-        print(f'add {len(self.comics)} comics')
+        print(f'done')
+        self.comics = []
