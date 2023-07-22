@@ -3,7 +3,8 @@ import time
 import datetime
 from tqdm import tqdm
 from urllib import request
-from urllib.parse import urljoin
+from urllib.error import HTTPError
+from urllib.parse import urljoin, urlparse
 
 import requests
 import pykakasi
@@ -14,6 +15,65 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from app import db
 from app.models import App, Comic, CrawlHistory
+
+
+class RobotsTxtError(Exception):
+    """RobotsTxtのエラー"""
+    pass
+
+
+class RobotsTxt:
+    def __init__(self, url):
+        self.url = url
+        self._get_robots_txt()
+        self._parse_robots_txt()
+
+    def _get_robots_txt(self):
+        """robots.txtを取得する"""
+        try:
+            self.robots_txt = request.urlopen(
+                urljoin(self.url, 'robots.txt')
+            ).read().decode('utf-8')
+            # コメントを除去する
+            self.robots_txt = re.sub(r'#.*\n', '', self.robots_txt)
+        except HTTPError:
+            self.robots_txt = ""
+
+    def _parse_robots_txt(self):
+        """robots.txtを解析する"""
+        self.robots_dict = {
+            'crawl-delay': 1,
+            'disallow': [],
+            'allow': [],
+            'sitemap': [],
+            'else': []
+        }        
+        if not self.robots_txt: return
+
+        agents = self.robots_txt.split('\n\n')
+        my_agent = list(filter(lambda x: x.startswith('User-agent: *'), agents))
+        if not my_agent: return 
+        my_agent = my_agent[0]
+        for line in my_agent.split('\n')[1:]:
+            line = line.split(': ')
+            if len(line) != 2: continue
+            if line[0] == 'Crawl-delay':
+                self.robots_dict[line[0].lower()] = int(line[1])
+            elif line[0] in ['Disallow', 'Allow', 'Sitemap']:
+                self.robots_dict[line[0].lower()].append(line[1])
+            else:
+                self.robots_dict['else'].append(line)
+    
+    def apply_crawl_delay(self):
+        """クロール間隔を取得する"""
+        time.sleep(self.robots_dict['crawl-delay'])
+    
+    def check_disallow(self, url):
+        """urlがdisallowされているかを判定する"""
+        url_path = urlparse(url).path
+        if url_path == '': url_path = '/'
+        if url_path in self.robots_dict['disallow']:
+            raise RobotsTxtError(f'{url} is disallowed by robots.txt')
 
 
 def exception(func):
@@ -57,16 +117,6 @@ def exception(func):
     return wrapper
 
 
-def get_soup(url):
-    """urlからsoupを取得する"""
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
-    }
-    res = requests.get(url, headers=headers)
-    soup = BeautifulSoup(res.content, 'html.parser')
-    return soup
-
-
 class ComicCrawler:
     def __init__(self, app_record: App):
         self.app_record = app_record
@@ -92,12 +142,26 @@ class ComicCrawler:
             self.crawl_func = self._crawl_ura_sunday
         else:
             raise ValueError(f'app name is invalid {self.app_record.name}')
+        self.robots_txt = RobotsTxt(self.app_record.site_url)
         self.comics = []
         # ルビ振り
         kakasi = pykakasi.kakasi()
         kakasi.setMode("J", "H")
         kakasi.setMode("K", "H")
         self.conv = kakasi.getConverter()
+
+
+    def get_soup(self, url):
+        """urlからsoupを取得する"""
+        self.robots_txt.check_disallow(url)
+        headers = {
+            "User-Agent": self.app_record.user_agent
+        }
+        res = requests.get(url, headers=headers)
+        soup = BeautifulSoup(res.content, 'html.parser')
+        self.robots_txt.apply_crawl_delay()
+        return soup
+
 
     def crawl(self):
         print(f'crawling {self.app_record.name}...')
@@ -194,7 +258,7 @@ class ComicCrawler:
     def _crawl_gangan_online(self):
         """id:8, ガンガンONLINEの作品一覧を取得"""
         load_url = f"{self.app_record.site_url}/search"
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
 
         # 作品一覧を取得
         datas = soup.find_all("a", class_=re.compile("SearchTitle_title"))
@@ -232,7 +296,7 @@ class ComicCrawler:
         """id:9 コミックDAYSの作品一覧を取得"""
         crawled_at = datetime.datetime.now()
         load_url = urljoin(self.app_record.site_url, '/series')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas = soup.find_all("li", class_="daily-series-item")
         for data in datas:
             title = data.find("h4", class_="daily-series-title").text
@@ -255,11 +319,11 @@ class ComicCrawler:
     def _crawl_sunday_webry(self):
         """id:12 サンデーうぇぶりの作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas_normal = soup.find_all("a", class_="webry-series-item-link")
         # 夜サンデー
         load_url = urljoin(self.app_record.site_url, '/series/yoru-sunday')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas_yoru = soup.find_all("a", class_="webry-series-item-link")
         
         datas = datas_normal + datas_yoru
@@ -287,7 +351,7 @@ class ComicCrawler:
     def _crawl_maga_poke(self):
         """id:18, マガポケの作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
 
         datas = soup.find_all("li", class_="daily-series-item")
         crawled_at = datetime.datetime.now()
@@ -321,8 +385,7 @@ class ComicCrawler:
         i = 1
         while True:
             load_url = urljoin(self.app_record.site_url, f'/freemium/book_titles?page={i}')
-            soup = get_soup(load_url)
-            time.sleep(1)
+            soup = self.get_soup(load_url)
 
             datas = soup.find("div", class_="js-react-on-rails-component")["data-props"]
             datas = eval(datas)["list"]["book_titles"]
@@ -345,7 +408,7 @@ class ComicCrawler:
     def _crawl_manga_up(self):
         """id:26 マンガUP！の作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, 'original')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
 
         datas = soup.find_all("li")
         crawled_at = datetime.datetime.now()
@@ -379,11 +442,11 @@ class ComicCrawler:
     def _crawl_shonen_jump_plus(self):
         """id:35 少年ジャンプ＋の作品一覧を取得"""
         load_url = urljoin(self.app_record.site_url, '/series')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas_1 = soup.find_all("li", class_="series-list-item")
 
         load_url = urljoin(self.app_record.site_url, '/series/finished')
-        soupu = get_soup(load_url)
+        soupu = self.get_soup(load_url)
         datas_2 = soup.find_all("li", class_="series-list-item")
 
         datas = datas_1 + datas_2
@@ -414,12 +477,11 @@ class ComicCrawler:
         # 連載中作品
         print("連載中作品:")
         load_url = urljoin(self.app_record.site_url, '/serial_title')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas = soup.find("div", class_="title-all-list").find_all("li")
         for data in tqdm(datas):
             if not data.find("a"): continue
             href = data.find("a")["href"]
-            time.sleep(1)
             url = urljoin(self.app_record.site_url, href)
             soup_comic = get_soup(url)
 
@@ -440,7 +502,7 @@ class ComicCrawler:
 
         # 完結作品
         load_url = urljoin(self.app_record.site_url, '/complete_title')
-        soup = get_soup(load_url)
+        soup = self.get_soup(load_url)
 
         datas = soup.find("div", class_="title-all-list").find_all("li")
         for data in datas:
