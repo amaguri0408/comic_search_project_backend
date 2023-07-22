@@ -76,6 +76,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_line_manga
         elif self.app_record.name == 'ガンガンONLINE':
             self.crawl_func = self._crawl_gangan_online
+        elif self.app_record.name == 'コミックDAYS':
+            self.crawl_func = self._crawl_comic_days
         elif self.app_record.name == 'サンデーうぇぶり':
             self.crawl_func = self._crawl_sunday_webry
         elif self.app_record.name == 'マガポケ':
@@ -219,6 +221,30 @@ class ComicCrawler:
                 'title_kana': title_kana,
                 'main_author': main_author,
                 'sub_author': sub_author,
+                'app_id': self.app_record.id,
+                'url': url,
+                'crawled_at': crawled_at,
+            })
+
+
+    @exception
+    def _crawl_comic_days(self):
+        """id:9 コミックDAYSの作品一覧を取得"""
+        crawled_at = datetime.datetime.now()
+        load_url = urljoin(self.app_record.site_url, '/series')
+        soup = get_soup(load_url)
+        datas = soup.find_all("li", class_="daily-series-item")
+        for data in datas:
+            title = data.find("h4", class_="daily-series-title").text
+            author = data.find("h5", class_="daily-series-author").text
+            author_list = author.split("/")
+            a_tag = data.find("a")
+            if not a_tag: continue
+            url = a_tag["href"]
+            self.comics.append({
+                'title': title,
+                'title_kana': self.conv.do(title),
+                'main_author': ','.join(author_list),
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
