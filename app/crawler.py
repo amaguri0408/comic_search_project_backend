@@ -8,6 +8,9 @@ from urllib.parse import urljoin
 import requests
 import pykakasi
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 
 from app import db
 from app.models import App, Comic, CrawlHistory
@@ -67,7 +70,9 @@ def get_soup(url):
 class ComicCrawler:
     def __init__(self, app_record: App):
         self.app_record = app_record
-        if self.app_record.name == 'ガンガンONLINE':
+        if self.app_record.name == 'COMIC FUZ':
+            self.crawl_func = self._crawl_comic_fuz
+        elif self.app_record.name == 'ガンガンONLINE':
             self.crawl_func = self._crawl_gangan_online
         elif self.app_record.name == 'サンデーうぇぶり':
             self.crawl_func = self._crawl_sunday_webry
@@ -93,6 +98,38 @@ class ComicCrawler:
     def crawl(self):
         print(f'crawling {self.app_record.name}...')
         return self.crawl_func()
+    
+
+    @exception
+    def _crawl_comic_fuz(self):
+        """id:2 COMIC FUZの作品一覧を取得"""
+        crawled_at = datetime.datetime.now()
+        load_url = f"{self.app_record.site_url}/rensai"
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver.get(load_url)
+        time.sleep(1)
+
+        # 作品一覧を取得
+        a_tags = driver.find_elements(By.CSS_SELECTOR, ".Title_title__mh5OI")
+        href_list = [a_tag.get_attribute('href') for a_tag in a_tags]
+
+        # 作品詳細ページに遷移
+        for href in tqdm(href_list):
+            driver.get(href)
+            time.sleep(1)
+            # class="title_detail_introduction__name__Qr8HU"のタイトルを取得
+            title = driver.find_element(By.CSS_SELECTOR, ".title_detail_introduction__name__Qr8HU").text
+            author_list = list(map(lambda x: x.text, driver.find_elements(By.CSS_SELECTOR, ".AuthorTag_author__name__IthhZ")))
+            print(title, author_list)
+            self.comics.append({
+                'title': title,
+                'title_kana': self.conv.do(title),
+                'main_author': ','.join(author_list),
+                'app_id': self.app_record.id,
+                'url': href,
+                'crawled_at': crawled_at,
+            })
+        driver.quit()
 
 
     @exception
@@ -308,7 +345,7 @@ class ComicCrawler:
             title = info.find("h1").text.strip()
             author = info.find("div", class_="author").text.strip()
             author_list = list(map(lambda x: re.split(r'[:：]', x)[-1].strip(), author.split('\u3000')))
-            author_list = list(filter(lambda x: not x, author_list))
+            author_list = list(filter(bool, author_list))
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
@@ -329,6 +366,7 @@ class ComicCrawler:
             title = data.find("h2").text
             author = data.find("div").find("div").text
             author_list = list(map(lambda x: x.split(":")[-1].strip(), author.split('\u3000')))
+            author_list = list(filter(bool, author_list))
             url = data.find("a")["href"]
             self.comics.append({
                 'title': title,
