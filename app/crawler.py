@@ -483,7 +483,7 @@ class ComicCrawler:
             if not data.find("a"): continue
             href = data.find("a")["href"]
             url = urljoin(self.app_record.site_url, href)
-            soup_comic = get_soup(url)
+            soup_comic = self.get_soup(url)
 
             info = soup_comic.find("div", class_="info")
             title = info.find("h1").text.strip()
