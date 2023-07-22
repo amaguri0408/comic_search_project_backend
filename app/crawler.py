@@ -72,6 +72,8 @@ class ComicCrawler:
         self.app_record = app_record
         if self.app_record.name == 'COMIC FUZ':
             self.crawl_func = self._crawl_comic_fuz
+        elif self.app_record.name == 'LINEマンガ':
+            self.crawl_func = self._crawl_line_manga
         elif self.app_record.name == 'ガンガンONLINE':
             self.crawl_func = self._crawl_gangan_online
         elif self.app_record.name == 'サンデーうぇぶり':
@@ -120,7 +122,61 @@ class ComicCrawler:
             # class="title_detail_introduction__name__Qr8HU"のタイトルを取得
             title = driver.find_element(By.CSS_SELECTOR, ".title_detail_introduction__name__Qr8HU").text
             author_list = list(map(lambda x: x.text, driver.find_elements(By.CSS_SELECTOR, ".AuthorTag_author__name__IthhZ")))
-            print(title, author_list)
+            self.comics.append({
+                'title': title,
+                'title_kana': self.conv.do(title),
+                'main_author': ','.join(author_list),
+                'app_id': self.app_record.id,
+                'url': href,
+                'crawled_at': crawled_at,
+            })
+        driver.quit()
+
+
+    @exception
+    def _crawl_line_manga(self):
+        """id:4 LINEマンガの作品一覧を取得"""
+        crawled_at = datetime.datetime.now()
+        load_url = urljoin(self.app_record.site_url, '/periodic/gender_ranking?gender=0')
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver.get(load_url)
+        time.sleep(1)
+
+        pre_comic_len = 0
+        # 止まるまでスクロール
+        stop_flag = False
+        while not stop_flag:
+            # スクロールの高さを取得
+            scroll_height = driver.execute_script("return document.body.scrollHeight")
+            # スクロール
+            driver.execute_script(f"window.scrollTo(0, {scroll_height});")
+            time.sleep(1)
+
+            rank_div = driver.find_element(By.CSS_SELECTOR, ".MdCMN05List")
+            comic_list = rank_div.find_elements(By.CSS_SELECTOR, "a")
+            print(len(comic_list))
+
+            i = 0
+            while len(comic_list) == pre_comic_len:
+                time.sleep(1)
+                rank_div = driver.find_element(By.CSS_SELECTOR, ".MdCMN05List")
+                comic_list = rank_div.find_elements(By.CSS_SELECTOR, "a")
+                print(f"stop: {i}, {len(comic_list)}")
+                if i >= 10:
+                    stop_flag = True
+                    break
+                i += 1
+            
+            pre_comic_len = len(comic_list)
+
+
+        href_list = [a_tag.get_attribute('href') for a_tag in comic_list]
+        for href in tqdm(href_list):
+            driver.get(href)
+            time.sleep(1)
+            title = driver.find_element(By.CSS_SELECTOR, ".mdMNG01Ttl").text
+            author_list = driver.find_element(By.CSS_SELECTOR, ".mdMNG04Dd02").find_elements(By.CSS_SELECTOR, "a")
+            author_list = list(map(lambda x: x.text.strip(), author_list))
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
