@@ -26,6 +26,7 @@ class App(db.Model):
     app_store_url = db.Column(db.String(500))
     google_play_url = db.Column(db.String(500))
     site_url = db.Column(db.String(500))
+    crawl_status = db.Column(db.String(30))
 
     def __repr__(self):
         return f'<App {self.id} {self.name}>' 
@@ -104,6 +105,7 @@ class App(db.Model):
                     app_record.abj_management_number = row['abj_management_number']
                     app_record.company_name = row['company_name']
                     app_record.service_type = row['service_type']
+                    app_record.crawl_status = row['crawl_status']
                     app_record = App.update_image_url(app_record)
                 else:
                     app_record = App(**row)
@@ -120,15 +122,58 @@ class Comic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     title_kana = db.Column(db.String(255), nullable=False)
-    main_author = db.Column(db.String(255), nullable=False)
-    sub_author = db.Column(db.String(255))
+    author = db.Column(db.String(255))
+    raw_author = db.Column(db.String(255))
+
+    def __repr__(self):
+        return f'<Comic {self.id} {self.title}>'
+    
+    @staticmethod
+    def add_comic(comic_data):
+        comic_query = Comic.query.filter(Comic.title == comic_data.title)
+        assert comic_query.count() <= 1, f'comic_query must be 1, but {comic_query}'
+        comic_query = comic_query.first()
+        if comic_query:
+            if not comic_query.author and comic_data.author:
+                comic_query.author = comic_data.author
+                db.session.commit()
+            return comic_query.id
+        else:
+            db.session.add(comic_data)
+            db.session.commit()
+            return comic_data.id
+
+
+class Crawl(db.Model):
+    __tablename__ = 'crawl'
+    id = db.Column(db.Integer, primary_key=True)
+    comic_id = db.Column(db.Integer, db.ForeignKey('comic.id'), nullable=False)
     app_id = db.Column(db.Integer, db.ForeignKey('app.id'), nullable=False)
     url = db.Column(db.String(255), nullable=False)
     crawled_at = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f'<Comic {self.id} {self.title}>'
+        return f'<Crawl {self.id} {self.url}>'
     
+    
+    @staticmethod
+    def add_crawl(crawl_data):
+        new_comic = Comic(
+            title=crawl_data['title'].strip(), 
+            title_kana=crawl_data['title_kana'].strip(), 
+            author=crawl_data['author'],
+            raw_author=crawl_data['raw_author'].strip(),
+        )
+        comic_id = Comic.add_comic(new_comic)
+        crawl = Crawl(
+            comic_id=comic_id,
+            app_id=crawl_data['app_id'],
+            url=crawl_data['url'],
+            crawled_at=crawl_data['crawled_at'],
+        )
+        db.session.add(crawl)
+        db.session.commit()
+
 
 class CrawlHistory(db.Model):
     __tablename__ = 'crawl_history'
@@ -137,7 +182,7 @@ class CrawlHistory(db.Model):
     crawled_at = db.Column(db.DateTime, default=datetime.datetime.now(), nullable=False)
     status = db.Column(Enum('success', 'failure', name='crawl_status_enum'), nullable=False)
     comics_num = db.Column(db.Integer)
-    detail = db.Column(db.String(255))
+    detail = db.Column(db.String(1000))
 
     def __repr__(self):
         return f'<CrawlHistory {self.app_id} {self.crawled_at}>'
