@@ -1,6 +1,7 @@
 flask
 Flask-SQLAlchemy
 Flask-Migrate
+flask-cors
 mysql-connector-python
 pymysql
 pykakasi
