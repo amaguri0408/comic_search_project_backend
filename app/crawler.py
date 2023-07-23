@@ -143,7 +143,8 @@ class ComicCrawler:
             self.crawl_func = self._crawl_ura_sunday
         else:
             raise ValueError(f'app name is invalid {self.app_record.name}')
-        self.robots_txt = RobotsTxt(self.app_record.site_url)
+        if self.app_record.site_url:
+            self.robots_txt = RobotsTxt(self.app_record.site_url)
         self.comics = []
         # ルビ振り
         kakasi = pykakasi.kakasi()
@@ -174,9 +175,10 @@ class ComicCrawler:
         """id:2 COMIC FUZの作品一覧を取得"""
         crawled_at = datetime.datetime.now()
         load_url = f"{self.app_record.site_url}/rensai"
+        self.robots_txt.check_disallow(load_url)
         driver = webdriver.Chrome(ChromeDriverManager().install())
         driver.get(load_url)
-        time.sleep(1)
+        self.robots_txt.apply_crawl_delay()
 
         # 作品一覧を取得
         a_tags = driver.find_elements(By.CSS_SELECTOR, ".Title_title__mh5OI")
@@ -184,15 +186,17 @@ class ComicCrawler:
 
         # 作品詳細ページに遷移
         for href in tqdm(href_list):
+            self.robots_txt.check_disallow(href)
             driver.get(href)
-            time.sleep(1)
+            self.robots_txt.apply_crawl_delay()
             # class="title_detail_introduction__name__Qr8HU"のタイトルを取得
             title = driver.find_element(By.CSS_SELECTOR, ".title_detail_introduction__name__Qr8HU").text
             author_list = list(map(lambda x: x.text, driver.find_elements(By.CSS_SELECTOR, ".AuthorTag_author__name__IthhZ")))
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
-                'main_author': ','.join(author_list),
+                'author': ','.join(author_list),
+                'raw_author': ' '.join(author_list),
                 'app_id': self.app_record.id,
                 'url': href,
                 'crawled_at': crawled_at,
@@ -205,9 +209,10 @@ class ComicCrawler:
         """id:4 LINEマンガの作品一覧を取得"""
         crawled_at = datetime.datetime.now()
         load_url = urljoin(self.app_record.site_url, '/periodic/gender_ranking?gender=0')
+        self.robots_txt.check_disallow(load_url)
         driver = webdriver.Chrome(ChromeDriverManager().install())
         driver.get(load_url)
-        time.sleep(1)
+        self.robots_txt.apply_crawl_delay()
 
         pre_comic_len = 0
         # 止まるまでスクロール
@@ -217,7 +222,7 @@ class ComicCrawler:
             scroll_height = driver.execute_script("return document.body.scrollHeight")
             # スクロール
             driver.execute_script(f"window.scrollTo(0, {scroll_height});")
-            time.sleep(1)
+            self.robots_txt.apply_crawl_delay()
 
             rank_div = driver.find_element(By.CSS_SELECTOR, ".MdCMN05List")
             comic_list = rank_div.find_elements(By.CSS_SELECTOR, "a")
@@ -225,7 +230,7 @@ class ComicCrawler:
 
             i = 0
             while len(comic_list) == pre_comic_len:
-                time.sleep(1)
+                self.robots_txt.apply_crawl_delay()
                 rank_div = driver.find_element(By.CSS_SELECTOR, ".MdCMN05List")
                 comic_list = rank_div.find_elements(By.CSS_SELECTOR, "a")
                 print(f"stop: {i}, {len(comic_list)}")
@@ -239,15 +244,17 @@ class ComicCrawler:
 
         href_list = [a_tag.get_attribute('href') for a_tag in comic_list]
         for href in tqdm(href_list):
+            self.robots_txt.check_disallow(href)
             driver.get(href)
-            time.sleep(1)
+            self.robots_txt.apply_crawl_delay()
             title = driver.find_element(By.CSS_SELECTOR, ".mdMNG01Ttl").text
             author_list = driver.find_element(By.CSS_SELECTOR, ".mdMNG04Dd02").find_elements(By.CSS_SELECTOR, "a")
             author_list = list(map(lambda x: x.text.strip(), author_list))
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
-                'main_author': ','.join(author_list),
+                'author': '',
+                'raw_author': ' '.join(author_list),
                 'app_id': self.app_record.id,
                 'url': href,
                 'crawled_at': crawled_at,
@@ -307,7 +314,8 @@ class ComicCrawler:
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
-                'main_author': ','.join(author_list),
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -332,14 +340,12 @@ class ComicCrawler:
             title_kana = self.conv.do(title)
             author = data.find("p", class_="author").text
             author_list = author.split('/')
-            main_author = ','.join(author_list[:min(2, len(author_list))])
-            sub_author = ','.join(author_list[min(2, len(author_list)):])
             url = urljoin(self.app_record.site_url, data['href'])
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
-                'main_author': main_author,
-                'sub_author': sub_author,
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -363,15 +369,13 @@ class ComicCrawler:
                 if '/' in x: return x.split('/')[1]
                 else: return x
             author_list = list(map(func, author.split(' ')))
-            main_author = ','.join(author_list[:min(2, len(author_list))])
-            sub_author = ','.join(author_list[min(2, len(author_list)):])
 
             url = data.find("a")["href"]
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
-                'main_author': main_author,
-                'sub_author': sub_author,
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -395,7 +399,8 @@ class ComicCrawler:
                 self.comics.append({
                     'title': data["title"],
                     'title_kana': self.conv.do(data["title"]),
-                    'main_author': data["author_name"],
+                    'author': '',
+                    'raw_author': data["author_name"],
                     'app_id': self.app_record.id,
                     'url': urljoin(self.app_record.site_url, f'freemium/book_titles{data["key"]}'),
                     'crawled_at': crawled_at,
@@ -416,21 +421,19 @@ class ComicCrawler:
             # print(data)
             title = data.find("p", class_="ttl").text
             title_kana = self.conv.do(title)
-            author = data.find("p", class_="artist")
+            author = data.find("p", class_="artist").text
             # 任意のタブ<>で正規表現を使って区切る
             author_list = re.split(r'<.+?>', str(author))[1:-1]
             author_list = list(map(lambda x: re.split(r'[:：]', x)[-1], author_list))
             new_author_list = []
             for author_data in author_list:
                 new_author_list.extend(author_data.split('・'))
-            main_author = ','.join(new_author_list[:min(2, len(new_author_list))])
-            sub_author = ','.join(new_author_list[min(2, len(new_author_list)):])
             url = urljoin(load_url + '/', data.find("a")['href'])
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
-                'main_author': main_author,
-                'sub_author': sub_author,
+                'author': ','.join(new_author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -445,7 +448,7 @@ class ComicCrawler:
         datas_1 = soup.find_all("li", class_="series-list-item")
 
         load_url = urljoin(self.app_record.site_url, '/series/finished')
-        soupu = self.get_soup(load_url)
+        soup = self.get_soup(load_url)
         datas_2 = soup.find_all("li", class_="series-list-item")
 
         datas = datas_1 + datas_2
@@ -455,14 +458,12 @@ class ComicCrawler:
             title_kana = self.conv.do(title)
             author = data.find("h3", class_="series-list-author").text
             author_list = author.split('/')
-            main_author = ','.join(author_list[:min(2, len(author_list))])
-            sub_author = ','.join(author_list[min(2, len(author_list)):])
             url = data.find("a")["href"]
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
-                'main_author': main_author,
-                'sub_author': sub_author,
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -478,7 +479,7 @@ class ComicCrawler:
         load_url = urljoin(self.app_record.site_url, '/serial_title')
         soup = self.get_soup(load_url)
         datas = soup.find("div", class_="title-all-list").find_all("li")
-        for data in tqdm(datas[:10]):
+        for data in tqdm(datas):
             if not data.find("a"): continue
             href = data.find("a")["href"]
             url = urljoin(self.app_record.site_url, href)
@@ -492,7 +493,8 @@ class ComicCrawler:
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
-                'main_author': ','.join(author_list),
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -514,7 +516,8 @@ class ComicCrawler:
             self.comics.append({
                 'title': title,
                 'title_kana': self.conv.do(title),
-                'main_author': ','.join(author_list),
+                'author': ','.join(author_list),
+                'raw_author': author,
                 'app_id': self.app_record.id,
                 'url': urljoin(self.app_record.site_url, data.find("a")["href"]),
                 'crawled_at': crawled_at,
