@@ -1,7 +1,11 @@
+import time
+
+from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 from flask import Flask, render_template, request, jsonify
 
-from app import app
-from app.models import App, Comic, CrawlHistory
+from app import app, db
+from app.models import App, Comic, Crawl, CrawlHistory
 from app.crawler import ComicCrawler
 
 
@@ -39,30 +43,52 @@ def comics_api():
 
 @app.route('/api/comics_table', methods=['GET'])
 def comics_table_api():
-    comics = Comic.query.all()
+    comics = Comic.query.options(joinedload(Comic.crawls)).all()
 
     # アプリの情報をデータベースから取得
     apps = App.query.all()
     app_dict = {app_record.id: app_record.name for app_record in apps}
 
-    table_data = []
-    for comic in comics:
-        table_data.append({
+    def func_comic(comic):
+        res = {
             'title': comic.title,
             'title_kana': comic.title_kana,
-            'main_author': comic.main_author,
-            'sub_author': comic.sub_author,
-            'url': comic.url,
-            'app_name': app_dict[comic.app_id],
-            'crawled_at': comic.crawled_at.strftime('%Y/%m/%d'),
-        })
+            'author': comic.author,
+            'raw_author': comic.raw_author,
+            'apps': [
+                {
+                    'app_name': app_dict[crawl.app_id],
+                    'url': crawl.url,
+                    'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
+                }
+                for crawl in comic.crawls
+            ],
+        }
+        return res
+    table_data = list(map(func_comic, comics))
     return jsonify({'data': table_data})
 
 
 @app.route('/api/app_status_table', methods=['GET'])
 def app_status_table_api():
+    t1 = time.time()
     apps = App.query.all()
-    
+    print(time.time() - t1)
+    t1 = time.time()
+
+    # 各Appの最新のCrawlHistoryのidを取得
+    subquery = db.session.query(
+        CrawlHistory.app_id, 
+        func.max(CrawlHistory.crawled_at).label('crawled_at_max')
+    ).group_by(CrawlHistory.app_id).subquery()
+
+    # 最新のCrawlHistoryのレコードを取得
+    latest_crawl_histories = db.session.query(CrawlHistory).join(
+        subquery, CrawlHistory.id == subquery.c.app_id
+    ).all()
+
+    crawl_history_dict = {ch.app_id: ch for ch in latest_crawl_histories}
+
     table_data = []
     for app_record in apps:
         record_dict = {
@@ -82,7 +108,8 @@ def app_status_table_api():
         elif app_record.platform_type == 'both': record_dict['platform_type'] = 'アプリ, Web'
         else: record_dict['platform_type'] = '-'
         # CrawlHistoryから最新のデータを取得
-        crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
+        # crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
+        crawl_history = crawl_history_dict.get(app_record.id)
         if crawl_history is None:
             record_dict['status'] = '未対応'
             record_dict['comics_num'] = '-'
@@ -98,5 +125,6 @@ def app_status_table_api():
             record_dict['detail'] = crawl_history.detail
         table_data.append(record_dict)
     
+    print(time.time() - t1)
     return jsonify({'data': table_data})
 

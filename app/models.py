@@ -27,6 +27,7 @@ class App(db.Model):
     google_play_url = db.Column(db.String(500))
     site_url = db.Column(db.String(500))
     crawl_status = db.Column(db.String(30))
+    crawl_histories = db.relationship('CrawlHistory', backref='crawl', lazy='dynamic')
 
     def __repr__(self):
         return f'<App {self.id} {self.name}>' 
@@ -124,6 +125,7 @@ class Comic(db.Model):
     title_kana = db.Column(db.String(255), nullable=False)
     author = db.Column(db.String(255))
     raw_author = db.Column(db.String(255))
+    crawls = db.relationship('Crawl', backref='comic', lazy='joined')
 
     def __repr__(self):
         return f'<Comic {self.id} {self.title}>'

@@ -14,7 +14,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 from app import db
-from app.models import App, Comic, CrawlHistory
+from app.models import App, Comic, Crawl, CrawlHistory
 
 
 class RobotsTxtError(Exception):
@@ -30,14 +30,15 @@ class RobotsTxt:
 
     def _get_robots_txt(self):
         """robots.txtを取得する"""
-        try:
-            self.robots_txt = request.urlopen(
-                urljoin(self.url, 'robots.txt')
-            ).read().decode('utf-8')
-            # コメントを除去する
-            self.robots_txt = re.sub(r'#.*\n', '', self.robots_txt)
-        except HTTPError:
+        res = requests.get(
+            urljoin(self.url, 'robots.txt')
+        )
+        if res.status_code != 200:
             self.robots_txt = ""
+            return
+        self.robots_txt = res.text            
+        # コメントを除去する
+        self.robots_txt = re.sub(r'#.*\n', '', self.robots_txt)
 
     def _parse_robots_txt(self):
         """robots.txtを解析する"""
@@ -155,7 +156,7 @@ class ComicCrawler:
         """urlからsoupを取得する"""
         self.robots_txt.check_disallow(url)
         headers = {
-            "User-Agent": self.app_record.user_agent
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
         }
         res = requests.get(url, headers=headers)
         soup = BeautifulSoup(res.content, 'html.parser')
@@ -268,23 +269,21 @@ class ComicCrawler:
             if '読切' in title: continue
 
             # 著者
-            author = data.find("p", class_=re.compile("SearchTitle_title__author")).text
+            raw_author = data.find("p", class_=re.compile("SearchTitle_title__author")).text
             author_list = []
-            for author_data in author.split('　'):
+            for author_data in raw_author.split('　'):
                 if '／' in author_data:
                     author_list.append('／'.join(author_data.split('／')[1:]))
                 else:
                     author_list.append(author_data)
-            main_author = ','.join(author_list[:min(2, len(author_list))])
-            sub_author = ','.join(author_list[min(2, len(author_list)):])
             
             url = f"{self.app_record.site_url}{data.get('href')}"
             title_kana = self.conv.do(title)
             self.comics.append({
                 'title': title,
                 'title_kana': title_kana,
-                'main_author': main_author,
-                'sub_author': sub_author,
+                'author': ','.join(author_list),
+                'raw_author': raw_author,
                 'app_id': self.app_record.id,
                 'url': url,
                 'crawled_at': crawled_at,
@@ -479,7 +478,7 @@ class ComicCrawler:
         load_url = urljoin(self.app_record.site_url, '/serial_title')
         soup = self.get_soup(load_url)
         datas = soup.find("div", class_="title-all-list").find_all("li")
-        for data in tqdm(datas):
+        for data in tqdm(datas[:10]):
             if not data.find("a"): continue
             href = data.find("a")["href"]
             url = urljoin(self.app_record.site_url, href)
@@ -533,15 +532,13 @@ class ComicCrawler:
 
     def save(self):
         # 同じアプリのcomicは削除
-        delete_comic = Comic.query.filter_by(app_id=self.app_record.id)
-        print(f'deleted App {self.app_record.name} {delete_comic.count()} comics')
-        delete_comic.delete()
+        delete_query = Crawl.query.filter_by(app_id=self.app_record.id)
+        print(f'deleted App {self.app_record.name} {delete_query.count()} comics')
+        delete_query.delete()
         db.session.commit()
 
         print(f'adding {len(self.comics)} comics')
-        for comic in self.comics:
-            comic_record = Comic(**comic)
-            db.session.add(comic_record)
-        db.session.commit()
+        for comic in tqdm(self.comics):
+            Crawl.add_crawl(comic)
         print(f'done')
         self.comics = []
