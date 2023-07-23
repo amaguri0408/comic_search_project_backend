@@ -36,6 +36,42 @@ def crawl():
     return jsonify(crawl_res['dict']), crawl_res['status_code']
 
 
+@app.route('/api/comic', methods=['GET'])
+def comic_api():
+    data = request.args
+    comic_id = data.get('id')
+
+    # アプリの情報をデータベースから取得
+    apps = App.query.all()
+    app_dict = {app_record.id: app_record for app_record in apps}
+
+    comic = Comic.query.filter_by(id=comic_id).options(joinedload(Comic.crawls)).first()
+    if comic is None:
+        return 'Comic not found', 404
+    
+    res = {
+        'id': comic.id,
+        'title': comic.title,
+        'title_kana': comic.title_kana,
+        'author': comic.author,
+        'raw_author': comic.raw_author,
+        'apps': [
+            {
+                'name': app_dict[crawl.app_id].name,
+                'img_url': urljoin(app.config['DEPLOY_URL'], app_dict[crawl.app_id].img_url),
+                'platform_type': app_dict[crawl.app_id].platform_type,
+                'app_store_url': app_dict[crawl.app_id].app_store_url,
+                'google_play_url': app_dict[crawl.app_id].google_play_url,
+                'site_url': app_dict[crawl.app_id].site_url,
+                'url': crawl.url,
+                'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
+            }
+            for crawl in comic.crawls
+        ],
+    }
+    return jsonify({'data': res})
+
+
 @app.route('/api/comics', methods=['GET'])
 def comics_api():
 
@@ -44,22 +80,26 @@ def comics_api():
 
     # アプリの情報をデータベースから取得
     apps = App.query.all()
-    app_dict = {app_record.id: app_record.name for app_record in apps}
+    app_name_dict = {app_record.id: app_record.name for app_record in apps}
+    app_img_url_dict = {app_record.id: app_record.img_url for app_record in apps}
 
     if fifty:
-        comics = Comic.query.filter(Comic.title_kana.like(f'{fifty}%')).options(joinedload(Comic.crawls)).all()
+        tmp = Comic.query.filter(Comic.title_kana.like(f'{fifty}%')).options(joinedload(Comic.crawls))
+        comics = tmp.order_by(Comic.title_kana).all()
     else:
         comics = Comic.query.options(joinedload(Comic.crawls)).all()
 
     def func_comic(comic):
         res = {
+            'id': comic.id,
             'title': comic.title,
             'title_kana': comic.title_kana,
             'author': comic.author,
             'raw_author': comic.raw_author,
             'apps': [
                 {
-                    'name': app_dict[crawl.app_id],
+                    'name': app_name_dict[crawl.app_id],
+                    'img_url': urljoin(app.config['DEPLOY_URL'], app_img_url_dict[crawl.app_id]),
                     'url': crawl.url,
                     'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
                 }
