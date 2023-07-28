@@ -11,14 +11,24 @@
         const column_list = [
             { title: 'タイトル', data: 'title' },
             { title: 'タイトル（かな）', data: 'title_kana', visible: false },
-            { title: '著者', data: 'main_author' },
-            { title: '著者2', data: 'sub_author', visible: false },
-            { title: 'アプリ', data: 'app_name' },
-            { title: 'リンク', data: 'url',
+            { title: '著者', data: 'author',
                 render: function(data, type, row, meta) {
-                    return '<a href="' + data + '" target="_blank">🔗</a>';
-                } },
-            { title: '情報取得日', data: 'crawled_at' }
+                    if (data) return data;
+                    else return row['raw_author'];
+                } 
+            },
+            { title: '著者2', data: 'raw_author', visible: false },
+            { title: 'アプリ', data: 'apps', 
+                render: function(data, type, row, meta) {
+                    if (data.length == 0) return '-';
+                    else {
+                        var res = '';
+                        data.forEach(function(app) {
+                            res += '<a href="' + app.url + '" target="_blank">' + app.app_name + '</a> ';
+                        });
+                        return res;
+                    }
+                }},
         ]
         // column_listに連番を振る
         const columndefs = column_list.map((column, index) => {

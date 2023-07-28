@@ -12,8 +12,36 @@
     <script>
         const detail_visible = '{{ dev }}' == 'true' ? true : false;
         const column_list = [
+            { title: 'アイコン', data: 'img_url', 
+                render: function(data, type, row, meta) {
+                    // アプリの場合はアプリアイコン、サイトの場合はWebアイコンを表示
+                    if (!data) return '-';
+                    if (row['platform_type'] == 'アプリ' || row['platform_type'] == 'アプリ, Web') {
+                        return '<img src="' + data + '" class="app-icon"></img>';
+                    } else {
+                        return '<img src="' + data + '" class="web-icon"></img>';
+                    }
+                }
+            },
             { title: 'アプリ/サイト名', data: 'app_name' },
+            { title: '事業者名', data: 'company_name' },
+            { title: 'タイプ', data: 'service_type' },
             { title: '形態', data: 'platform_type'},
+            { title: 'URL', data: 'url', 
+                render: function(data, type, row, meta) {
+                    var res = ''
+                    if (data.app_store_url) {
+                        res += '<a href="' + data.app_store_url + '" target="_blank">AppStore</a> ';
+                    }
+                    if (data.google_play_url) {
+                        res += '<a href="' + data.google_play_url + '" target="_blank">GooglePlay</a> ';
+                    }
+                    if (data.site_url) {
+                        res += '<a href="' + data.site_url + '" target="_blank">Web</a>';
+                    }
+                    return res;
+                }
+            },
             { title: '状態', data: 'status', 
                 render: function(data, type, row, meta) {
                     if (data == '未対応') {
@@ -25,7 +53,8 @@
                     } else {
                         return '<span class="badge">' + data + '</span>';
                     }
-                } },
+                } 
+            },
             { title: 'コミック収録数', data: 'comics_num' },
             { title: '最終情報取得日時', data: 'crawled_at'},
             { title: '取得失敗概要', data: 'detail', visible: detail_visible }
@@ -45,7 +74,7 @@
                     dataSrc: 'data'
                 },
                 responsive: true,
-                order: [[2, 'asc']],
+                order: [[6, 'asc']],
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.11.2/i18n/ja.json'
                 },

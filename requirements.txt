@@ -1,9 +1,12 @@
 flask
 Flask-SQLAlchemy
 Flask-Migrate
-gunicorn
-psycopg2
+flask-cors
 mysql-connector-python
+pymysql
 pykakasi
 bs4
 requests
+selenium==4.1.0
+webdriver_manager==3.4.2
+tqdm

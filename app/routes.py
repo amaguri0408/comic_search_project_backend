@@ -1,7 +1,13 @@
+import re
+import time
+from urllib.parse import urljoin
+
+from sqlalchemy.orm import joinedload
+from sqlalchemy import func, or_, and_
 from flask import Flask, render_template, request, jsonify
 
-from app import app
-from app.models import App, Comic, CrawlHistory
+from app import app, db
+from app.models import App, Comic, Crawl, CrawlHistory
 from app.crawler import ComicCrawler
 
 
@@ -26,51 +32,159 @@ def crawl():
         return 'App not found'
     crawler = ComicCrawler(app_query)
     crawl_res = crawler.crawl()
-    crawler.save()
+    if crawl_res['status_code'] == 200:
+        crawler.save()
     return jsonify(crawl_res['dict']), crawl_res['status_code']
+
+
+@app.route('/api/comic', methods=['GET'])
+def comic_api():
+    data = request.args
+    comic_id = data.get('id')
+
+    # アプリの情報をデータベースから取得
+    apps = App.query.all()
+    app_dict = {app_record.id: app_record for app_record in apps}
+
+    comic = Comic.query.filter_by(id=comic_id).options(joinedload(Comic.crawls)).first()
+    if comic is None:
+        return 'Comic not found', 404
+    
+    res = {
+        'id': comic.id,
+        'title': comic.title,
+        'title_kana': comic.title_kana,
+        'author': comic.author,
+        'raw_author': comic.raw_author,
+        'apps': [
+            {
+                'name': app_dict[crawl.app_id].name,
+                'img_url': urljoin(app.config['DEPLOY_URL'], app_dict[crawl.app_id].img_url),
+                'platform_type': app_dict[crawl.app_id].platform_type,
+                'app_store_url': app_dict[crawl.app_id].app_store_url,
+                'google_play_url': app_dict[crawl.app_id].google_play_url,
+                'site_url': app_dict[crawl.app_id].site_url,
+                'url': crawl.url,
+                'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
+            }
+            for crawl in comic.crawls
+        ],
+    }
+    return jsonify({'data': res})
 
 
 @app.route('/api/comics', methods=['GET'])
 def comics_api():
-    comics = Comic.query.all()
-    return jsonify([comic.to_dict() for comic in comics])
+
+    data = request.args
+    fifty = data.get('fifty')
+    keywords = data.get('keywords')
+
+    # アプリの情報をデータベースから取得
+    apps = App.query.all()
+    app_name_dict = {app_record.id: app_record.name for app_record in apps}
+    app_img_url_dict = {app_record.id: app_record.img_url for app_record in apps}
+
+    if fifty:
+        tmp = Comic.query.filter(Comic.title_kana.like(f'{fifty}%')).options(joinedload(Comic.crawls))
+        comics = tmp.order_by(Comic.title_kana).all()
+    elif keywords:
+        keywords_list = re.split(r'[ 　]', keywords)
+        columns_list = [Comic.title, Comic.title_kana, Comic.raw_author]
+        conditions = [or_(*[column.like(f'%{keyword}%') for column in columns_list]) for keyword in keywords_list]
+        tmp = Comic.query.filter(and_(*conditions)).options(joinedload(Comic.crawls))
+        comics = tmp.order_by(Comic.title_kana).all()
+    else:
+        comics = Comic.query.options(joinedload(Comic.crawls)).all()
+
+    def func_comic(comic):
+        res = {
+            'id': comic.id,
+            'title': comic.title,
+            'title_kana': comic.title_kana,
+            'author': comic.author,
+            'raw_author': comic.raw_author,
+            'apps': [
+                {
+                    'name': app_name_dict[crawl.app_id],
+                    'img_url': urljoin(app.config['DEPLOY_URL'], app_img_url_dict[crawl.app_id]),
+                    'url': crawl.url,
+                    'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
+                }
+                for crawl in comic.crawls
+            ],
+        }
+        return res
+    table_data = list(map(func_comic, comics))
+    return jsonify({'data': table_data})
 
 
 @app.route('/api/comics_table', methods=['GET'])
 def comics_table_api():
-    comics = Comic.query.all()
+    comics = Comic.query.options(joinedload(Comic.crawls)).all()
 
     # アプリの情報をデータベースから取得
     apps = App.query.all()
     app_dict = {app_record.id: app_record.name for app_record in apps}
 
-    table_data = []
-    for comic in comics:
-        table_data.append({
+    def func_comic(comic):
+        res = {
             'title': comic.title,
             'title_kana': comic.title_kana,
-            'main_author': comic.main_author,
-            'sub_author': comic.sub_author,
-            'url': comic.url,
-            'app_name': app_dict[comic.app_id],
-            'crawled_at': comic.crawled_at.strftime('%Y/%m/%d'),
-        })
+            'author': comic.author,
+            'raw_author': comic.raw_author,
+            'apps': [
+                {
+                    'app_name': app_dict[crawl.app_id],
+                    'url': crawl.url,
+                    'crawled_at': crawl.crawled_at.strftime('%Y/%m/%d'),
+                }
+                for crawl in comic.crawls
+            ],
+        }
+        return res
+    table_data = list(map(func_comic, comics))
     return jsonify({'data': table_data})
 
 
 @app.route('/api/app_status_table', methods=['GET'])
 def app_status_table_api():
     apps = App.query.all()
-    
+
+    # 各Appの最新のCrawlHistoryのidを取得
+    subquery = db.session.query(
+        CrawlHistory.app_id, 
+        func.max(CrawlHistory.id).label('max_id')
+    ).group_by(CrawlHistory.app_id).subquery()
+
+    # 最新のCrawlHistoryのレコードを取得
+    latest_crawl_histories = db.session.query(CrawlHistory).join(
+        subquery, CrawlHistory.id == subquery.c.max_id
+    ).all()
+
+    crawl_history_dict = {ch.app_id: ch for ch in latest_crawl_histories}
+
     table_data = []
     for app_record in apps:
         record_dict = {
             'app_name': app_record.name,
+            'abj_management_number': app_record.abj_management_number,
+            'company_name': app_record.company_name,
+            'service_type': app_record.service_type,
+            'img_url': app_record.img_url,
+            'url': {
+                'app_store_url': app_record.app_store_url,
+                'google_play_url': app_record.google_play_url,
+                'site_url': app_record.site_url,
+            },
         }
         if app_record.platform_type == 'app': record_dict['platform_type'] = 'アプリ'
         elif app_record.platform_type == 'web': record_dict['platform_type'] = 'Web'
+        elif app_record.platform_type == 'both': record_dict['platform_type'] = 'アプリ, Web'
+        else: record_dict['platform_type'] = '-'
         # CrawlHistoryから最新のデータを取得
-        crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
+        # crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
+        crawl_history = crawl_history_dict.get(app_record.id)
         if crawl_history is None:
             record_dict['status'] = '未対応'
             record_dict['comics_num'] = '-'
@@ -88,3 +202,57 @@ def app_status_table_api():
     
     return jsonify({'data': table_data})
 
+
+@app.route('/api/app_status_4front', methods=['GET'])
+def app_status_4front_api():
+    """フロントのためのAPI"""
+    apps = App.query.all()
+
+    # 各Appの最新のCrawlHistoryのidを取得
+    subquery = db.session.query(
+        CrawlHistory.app_id, 
+        func.max(CrawlHistory.id).label('max_id')
+    ).group_by(CrawlHistory.app_id).subquery()
+
+    # 最新のCrawlHistoryのレコードを取得
+    latest_crawl_histories = db.session.query(CrawlHistory).join(
+        subquery, CrawlHistory.id == subquery.c.max_id
+    ).all()
+
+    crawl_history_dict = {ch.app_id: ch for ch in latest_crawl_histories}
+    
+    table_data = []
+    for app_record in apps:
+        record_dict = {
+            'name': app_record.name,
+            'abj_management_number': app_record.abj_management_number,
+            'company_name': app_record.company_name,
+            'service_type': app_record.service_type,
+            'img_url': urljoin(app.config['DEPLOY_URL'], app_record.img_url),
+            'app_store_url': app_record.app_store_url,
+            'google_play_url': app_record.google_play_url,
+            'site_url': app_record.site_url,
+        }
+        if app_record.platform_type == 'app': record_dict['platform_type'] = 'アプリ'
+        elif app_record.platform_type == 'web': record_dict['platform_type'] = 'Web'
+        elif app_record.platform_type == 'both': record_dict['platform_type'] = 'アプリ, Web'
+        else: record_dict['platform_type'] = '-'
+        # CrawlHistoryから最新のデータを取得
+        # crawl_history = CrawlHistory.query.filter_by(app_id=app_record.id).order_by(CrawlHistory.crawled_at.desc()).first()
+        crawl_history = crawl_history_dict.get(app_record.id)
+        if crawl_history is None:
+            record_dict['status'] = '未対応'
+            record_dict['comics_num'] = '-'
+            record_dict['crawled_at'] = '-'
+            record_dict['detail'] = '-'
+        else:
+            if crawl_history.status == 'success':
+                record_dict['status'] = '取得成功'
+            elif crawl_history.status == 'failure':
+                record_dict['status'] = '取得失敗'
+            record_dict['comics_num'] = crawl_history.comics_num
+            record_dict['crawled_at'] = crawl_history.crawled_at.strftime('%Y/%m/%d %H:%M:%S')
+            record_dict['detail'] = crawl_history.detail
+        table_data.append(record_dict)
+    
+    return jsonify({'data': table_data})
