@@ -1,8 +1,9 @@
+import re
 import time
 from urllib.parse import urljoin
 
-from sqlalchemy import func
 from sqlalchemy.orm import joinedload
+from sqlalchemy import func, or_, and_
 from flask import Flask, render_template, request, jsonify
 
 from app import app, db
@@ -77,6 +78,7 @@ def comics_api():
 
     data = request.args
     fifty = data.get('fifty')
+    keywords = data.get('keywords')
 
     # アプリの情報をデータベースから取得
     apps = App.query.all()
@@ -85,6 +87,12 @@ def comics_api():
 
     if fifty:
         tmp = Comic.query.filter(Comic.title_kana.like(f'{fifty}%')).options(joinedload(Comic.crawls))
+        comics = tmp.order_by(Comic.title_kana).all()
+    elif keywords:
+        keywords_list = re.split(r'[ 　]', keywords)
+        columns_list = [Comic.title, Comic.title_kana, Comic.raw_author]
+        conditions = [or_(*[column.like(f'%{keyword}%') for column in columns_list]) for keyword in keywords_list]
+        tmp = Comic.query.filter(and_(*conditions)).options(joinedload(Comic.crawls))
         comics = tmp.order_by(Comic.title_kana).all()
     else:
         comics = Comic.query.options(joinedload(Comic.crawls)).all()
